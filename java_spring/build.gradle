@@ -1,0 +1,111 @@
+
+plugins {
+	id 'java'
+    id 'application'
+    id 'org.gretty' version '4.1.0'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+}
+
+def springVersion = '6.0.9'
+def log4jVersion = '2.20.0'
+def lombokVersion = '1.18.26'
+def hsqldbVersion = '2.7.1'
+def aspectjWeaverVersion = '1.9.19'
+def postgresVersion = '42.5.4'
+def hibernateValidatorVersion = '8.0.1.Final'
+def hibernateVersion = '6.3.1.Final'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'org.springframework',
+            name: 'spring-orm',
+            version: springVersion
+
+    implementation group: 'org.hibernate',
+            name: 'hibernate-core',
+            version: hibernateVersion
+
+    implementation group: 'org.springframework',
+            name: 'spring-webmvc',
+            version: springVersion
+
+    implementation group: 'org.springframework',
+            name: 'spring-context',
+            version: springVersion
+
+    implementation group: 'org.springframework',
+            name: 'spring-jdbc',
+            version: springVersion
+
+    implementation group: 'org.springframework',
+            name: 'spring-aop',
+            version: springVersion
+
+    implementation group: 'org.hibernate',
+            name: 'hibernate-validator',
+            version: hibernateValidatorVersion
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:32.1.1-jre'
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    
+    compileOnly group: 'jakarta.servlet',
+            name: 'jakarta.servlet-api',
+            version: '6.0.0'
+
+    implementation group: 'com.fasterxml.jackson.core',
+            name: 'jackson-databind',
+            version: '2.15.1'
+
+    compileOnly group: 'org.projectlombok',
+            name: 'lombok',
+            version: lombokVersion
+
+    annotationProcessor group: 'org.projectlombok',
+            name: 'lombok',
+            version: lombokVersion
+
+    implementation group: 'org.postgresql',
+            name: 'postgresql',
+            version: postgresVersion
+
+    implementation group: 'org.hsqldb',
+            name: 'hsqldb',
+            version: hsqldbVersion
+
+    implementation group: 'org.apache.commons',
+            name: 'commons-dbcp2',
+            version: '2.9.0'
+
+    implementation group: 'org.apache.logging.log4j',
+            name: 'log4j-api',
+            version: log4jVersion
+
+    implementation group: 'org.apache.logging.log4j',
+            name: 'log4j-core',
+            version: log4jVersion
+
+    implementation group: 'org.aspectj',
+            name: 'aspectjweaver',
+            version: aspectjWeaverVersion
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+
+gretty {
+    contextPath = '/'
+}

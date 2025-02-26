@@ -1,0 +1,98 @@
+@page
+@model WebApp.Pages.PlayGame.SelectAction
+@using GameBrain
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <link rel="stylesheet" href="/css/PlayGame.css" />
+    <title>SelectAction</title>
+</head>
+<body>
+@{
+    var gridStartX = Model.TicTacTwoBrain.GetGridLocation()[0];
+    var gridStartY = Model.TicTacTwoBrain.GetGridLocation()[1];
+    int gridSize = Model.TicTacTwoBrain.GetGridSize();
+    var gameStatus = Model.TicTacTwoBrain.GetStatus();
+}
+
+@if (gameStatus == EGameStatus.Ongoing && (Model.TicTacTwoBrain.GetNextMoveBy() == Model.UserName))
+{
+    <div>It's player @Model.TicTacTwoBrain.GetNextMoveBy()'s turn. Playing as @(Model.TicTacTwoBrain.GetPlayerX() == Model.TicTacTwoBrain.GetNextMoveBy() ? "X" : "O").</div>
+    <div class="action-buttons">
+        <form method="get" asp-page="/PlayGame/PlacePiece">
+            <input type="hidden" name="GameId" value="@Model.GameId" />
+            <input type="hidden" name="UserName" value="@Model.UserName" />
+            <button type="submit" class="btn btn-primary" style="visibility: @(Model.CanPlacePiece ? "visible" : "hidden")">
+                Place a piece
+            </button>
+        </form>
+        <form method="get" asp-page="/PlayGame/MoveGrid">
+            <input type="hidden" name="GameId" value="@Model.GameId" />
+            <input type="hidden" name="UserName" value="@Model.UserName" />
+            <button type="submit" class="btn btn-primary" style="visibility: @(Model.CanMoveGrid ? "visible" : "hidden")">
+                Move grid
+            </button>
+        </form>
+        <form method="get" asp-page="/PlayGame/MovePiece">
+            <input type="hidden" name="GameId" value="@Model.GameId" />
+            <input type="hidden" name="UserName" value="@Model.UserName" />
+            <button type="submit" class="btn btn-primary" style="visibility: @(Model.CanMovePiece ? "visible" : "hidden")">
+                Move a piece
+            </button>
+        </form>
+    </div>
+}else if (gameStatus == EGameStatus.Ongoing && ((Model.TicTacTwoBrain.GetNextMoveBy() == "AI_X") || (Model.TicTacTwoBrain.GetNextMoveBy() == "AI_O") || (Model.TicTacTwoBrain.GetNextMoveBy() == "AI")))
+{
+    <div>It's player @Model.TicTacTwoBrain.GetNextMoveBy()'s turn. Playing as @(Model.TicTacTwoBrain.GetPlayerX() == Model.TicTacTwoBrain.GetNextMoveBy() ? "X" : "O").</div>
+    <form method="post" asp-page-handler="AIMove">
+        <input type="hidden" name="GameId" value="@Model.GameId" />
+        <input type="hidden" name="UserName" value="@Model.UserName" />
+        <button type="submit" class="btn btn-primary">Let AI Make a Move</button>
+    </form>
+}else if (gameStatus == EGameStatus.Ongoing)
+{
+    <div>It's player @Model.TicTacTwoBrain.GetNextMoveBy()'s turn. Wait for their move.</div>
+    <a asp-page="/PlayGame/SelectAction" asp-route-username="@Model.UserName" asp-route-gameid="@Model.GameId" class="btn">
+        Reload page
+    </a>
+}
+
+else
+{
+    
+    <p>Game Over. Status: @gameStatus</p>
+    <a asp-page="/Home" asp-route-username="@Model.UserName" class="btn">
+        Play again
+    </a>
+}
+
+<div class="gameboard">
+    <table>
+        @for (int y = 0; y < Model.TicTacTwoBrain.DimY; y++)
+        {
+            <tr>
+                @for (int x = 0; x < Model.TicTacTwoBrain.DimX; x++)
+                {
+                    // Highlight cells within the inner grid
+                    bool isInnerGrid = x >= gridStartX && x < (gridStartX + gridSize) &&
+                                           y >= gridStartY && y < (gridStartY + gridSize);
+                    <td class="@(isInnerGrid ? "inner-grid" : "")">
+                        @if (Model.TicTacTwoBrain.GetBoard()[x][y] == "Empty")
+                        {
+                            <span>&nbsp;</span>
+                        }
+                        else
+                        {
+                            var pieceClass = Model.TicTacTwoBrain.GetBoard()[x][y] == Model.TicTacTwoBrain.GetPlayerX() ? "x-piece" : "o-piece";
+                            <span class="@pieceClass">@(Model.TicTacTwoBrain.GetBoard()[x][y] == Model.TicTacTwoBrain.GetPlayerX() ? "X" : "O") </span>
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+</div>
+</body>
+</html>

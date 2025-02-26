@@ -1,0 +1,127 @@
+@page
+@using GameBrain
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model WebApp.Pages.Home
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - TIC-TAC-TWO</title>
+    <link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+    <div class="text-center">
+        <h1 class="display-4">TIC-TAC-TWO</h1>
+        <h2>Choose a saved game or start a new one</h2>
+    </div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Ongoing Games where you @Model.UserName have joined:</th>
+        <th>Details</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @for (var i = 0; i < Model.SaveGames.Count; i++)
+    {
+        if (Model.Games[i].GetStatus() == EGameStatus.Ongoing && (Model.Games[i].GetPlayerX() == Model.UserName || Model.Games[i].GetPlayerO() == Model.UserName))
+        {
+            <tr>
+                <td>
+                    <a asp-page="/PlayGame/SelectAction" asp-route-gameid="@Model.SaveGames[i].Id" asp-route-userName="@Model.UserName" class="btn">
+                        @Model.SaveGames[i].Name
+                    </a>
+                </td>
+                <td>
+                    <ul>
+                        <li>Game Type: @Model.Games[i].GetGameType()</li>
+                        <li>Next Move By: @Model.Games[i].GetNextMoveBy()</li>
+                        <li>Size: @Model.Games[i].DimX x @Model.Games[i].DimY</li>
+                        <li>Win Condition: Place @Model.Games[i].GetWinCondition() in a row</li>
+                        <li>Moves Left: @Model.Games[i].GetMovesLeft()</li>
+                        <li>Grid Size: @Model.Games[i].GetGridSize()</li>
+                    </ul>
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Ongoing Games where you can join in as player O</th>
+            <th>Details</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @for (var i = 0; i < Model.SaveGames.Count; i++)
+        {
+            if (Model.Games[i].GetStatus() == EGameStatus.Ongoing && (Model.Games[i].GetPlayerO() == "O"))
+            {
+                <tr>
+                    <td>
+                        <a asp-page="/PlayGame/SelectAction" 
+                           asp-route-gameid="@Model.SaveGames[i].Id" 
+                           asp-route-user2Name="@Model.UserName"
+                           asp-route-userName="@Model.UserName"
+                           class="btn">
+                            @Model.SaveGames[i].Name
+                        </a>
+                    </td>
+                    <td>
+                        <ul>
+                            <li>Game Type: @Model.Games[i].GetGameType()</li>
+                            <li>Next Move By: @Model.Games[i].GetNextMoveBy()</li>
+                            <li>Size: @Model.Games[i].DimX x @Model.Games[i].DimY</li>
+                            <li>Win Condition: Place @Model.Games[i].GetWinCondition() in a row</li>
+                            <li>Moves Left: @Model.Games[i].GetMovesLeft()</li>
+                            <li>Grid Size: @Model.Games[i].GetGridSize()</li>
+                        </ul>
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+
+<div class="text-center">
+        <h2>Start a New Game</h2>
+        <form method="post">
+            <div>
+                <select id="SelectedConfigId" name="SelectedConfigId" class="form-control" required>
+                    <option value="">-- Select Configuration --</option>
+                    @foreach (var config in Model.GameConfigurations)
+                    {
+                        <option value="@config.Id">@config.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div class="mt-3">
+                <select id="SelectedGameType" name="SelectedGameType" class="form-control" required>
+                    <option value="">-- Select Game Type --</option>
+                    <option value="PlayerVersusPlayer">User vs User</option>
+                    <option value="PlayerVersusAI">User vs AI</option>
+                    <option value="AIVersusAI">AI vs AI</option>
+                </select>
+            </div>
+
+            <div class="mt-3">
+                <button type="submit" class="btn">Create New Game</button>
+            </div>
+        </form>
+
+
+        <a asp-page="/GameConfigurations/Create" asp-route-username="@Model.UserName" class="btn">
+            Create New Configuration
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/ConsoleUI/bin/Debug/net8.0/ConsoleUI.deps.json
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/ConsoleUI/bin/Debug/net8.0/ConsoleUI.dll
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/ConsoleUI/bin/Debug/net8.0/ConsoleUI.pdb
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/ConsoleUI/bin/Debug/net8.0/GameBrain.dll
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/ConsoleUI/bin/Debug/net8.0/GameBrain.pdb
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/ConsoleUI/obj/Debug/net8.0/ConsoleUI.csproj.AssemblyReference.cache
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/ConsoleUI/obj/Debug/net8.0/ConsoleUI.GeneratedMSBuildEditorConfig.editorconfig
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/ConsoleUI/obj/Debug/net8.0/ConsoleUI.AssemblyInfoInputs.cache
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/ConsoleUI/obj/Debug/net8.0/ConsoleUI.AssemblyInfo.cs
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/ConsoleUI/obj/Debug/net8.0/ConsoleUI.csproj.CoreCompileInputs.cache
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/ConsoleUI/obj/Debug/net8.0/ConsoleUI.csproj.Up2Date
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/ConsoleUI/obj/Debug/net8.0/ConsoleUI.dll
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/ConsoleUI/obj/Debug/net8.0/refint/ConsoleUI.dll
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/ConsoleUI/obj/Debug/net8.0/ConsoleUI.pdb
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/ConsoleUI/obj/Debug/net8.0/ref/ConsoleUI.dll
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/ConsoleUI/bin/Debug/net8.0/Domain.dll
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/ConsoleUI/bin/Debug/net8.0/Domain.pdb

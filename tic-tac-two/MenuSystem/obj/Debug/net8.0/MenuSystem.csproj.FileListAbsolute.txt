@@ -1,0 +1,12 @@
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/MenuSystem/bin/Debug/net8.0/MenuSystem.deps.json
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/MenuSystem/bin/Debug/net8.0/MenuSystem.dll
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/MenuSystem/bin/Debug/net8.0/MenuSystem.pdb
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/MenuSystem/obj/Debug/net8.0/MenuSystem.GeneratedMSBuildEditorConfig.editorconfig
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/MenuSystem/obj/Debug/net8.0/MenuSystem.AssemblyInfoInputs.cache
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/MenuSystem/obj/Debug/net8.0/MenuSystem.AssemblyInfo.cs
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/MenuSystem/obj/Debug/net8.0/MenuSystem.csproj.CoreCompileInputs.cache
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/MenuSystem/obj/Debug/net8.0/MenuSystem.dll
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/MenuSystem/obj/Debug/net8.0/refint/MenuSystem.dll
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/MenuSystem/obj/Debug/net8.0/MenuSystem.pdb
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/MenuSystem/obj/Debug/net8.0/ref/MenuSystem.dll
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/MenuSystem/obj/Debug/net8.0/MenuSystem.csproj.AssemblyReference.cache

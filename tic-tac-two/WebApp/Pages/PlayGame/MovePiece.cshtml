@@ -1,0 +1,99 @@
+
+@page
+@using GameBrain
+@model WebApp.Pages.PlayGame.MovePiece
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/css/PlayGame.css" />
+</head>
+<body>
+@{
+    var gridStartX = Model.TicTacTwoBrain.GetGridLocation()[0];
+    var gridStartY = Model.TicTacTwoBrain.GetGridLocation()[1];
+    int gridSize = Model.TicTacTwoBrain.GetGridSize();
+    bool isOngoing = Model.TicTacTwoBrain.GetStatus() == EGameStatus.Ongoing;
+}
+@functions {
+    private string RenderGamePiece(string cellContent)
+    {
+        if (cellContent == Model.TicTacTwoBrain.GetPlayerX())
+        {
+            return "X";
+        }
+        else if (cellContent == Model.TicTacTwoBrain.GetPlayerO())
+        {
+            return "O";
+        }
+        return cellContent; // Return the original content for empty or unrecognized cells
+    }
+}
+
+@if (isOngoing)
+{
+    <div>It's player @Model.TicTacTwoBrain.GetNextMoveBy()'s turn</div>
+    <p>Select a piece to move and a target location:</p>
+    <div class="gameboard ongoing">
+        <table>
+            @for (int y = 0; y < Model.TicTacTwoBrain.DimY; y++)
+            {
+                <tr>
+                    @for (int x = 0; x < Model.TicTacTwoBrain.DimX; x++)
+                    {
+                        string cellContent = Model.TicTacTwoBrain.GetBoard()[x][y];
+                        bool isPieceSelectable = cellContent == Model.TicTacTwoBrain.GetNextMoveBy();
+                        bool isTargetSelectable = cellContent == "Empty";
+                        bool isInnerGrid = x >= gridStartX && x < (gridStartX + gridSize) &&
+                                           y >= gridStartY && y < (gridStartY + gridSize);
+
+                        string cellClass = isInnerGrid ? "inner-grid" : "";
+
+                        if (Model.SelectedPiece == (x, y))
+                        {
+                            cellClass += " selected-piece";
+                        }
+                        else if (Model.SelectedTarget == (x, y))
+                        {
+                            cellClass += " selected-target";
+                        }
+
+                        <td class="@cellClass">
+                            @if (Model.SelectedPiece == (x, y))
+                            {
+                                @RenderGamePiece(cellContent)
+                            }
+                            else if (Model.SelectedTarget == (x, y))
+                            {
+                                <a asp-route-x="@x" asp-route-y="@y" asp-route-type="target" asp-route-GameId="@Model.GameId" asp-route-UserName="@Model.UserName">&nbsp;</a>
+                            }
+                            else if (isPieceSelectable)
+                            {
+                                <a asp-route-x="@x" asp-route-y="@y" asp-route-type="piece" asp-route-GameId="@Model.GameId" asp-route-UserName="@Model.UserName">@RenderGamePiece(cellContent)</a>
+                            }
+                            else if (isTargetSelectable)
+                            {
+                                <a asp-route-x="@x" asp-route-y="@y" asp-route-type="target" asp-route-GameId="@Model.GameId" asp-route-UserName="@Model.UserName">&nbsp;</a>
+                            }
+                            else
+                            {
+                                @RenderGamePiece(cellContent)
+                            }
+                        </td>
+
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+}
+else
+{
+    <p>Game Over: @Model.TicTacTwoBrain.GetStatus()</p>
+    <a asp-page="/Home" asp-route-username="@Model.UserName" class="btn">
+        Play again
+    </a>
+}
+</body>
+</html>
+

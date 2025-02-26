@@ -1,0 +1,15 @@
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/GameBrain/bin/Debug/net8.0/GameBrain.deps.json
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/GameBrain/bin/Debug/net8.0/GameBrain.dll
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/GameBrain/bin/Debug/net8.0/GameBrain.pdb
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/GameBrain/obj/Debug/net8.0/GameBrain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/GameBrain/obj/Debug/net8.0/GameBrain.AssemblyInfoInputs.cache
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/GameBrain/obj/Debug/net8.0/GameBrain.AssemblyInfo.cs
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/GameBrain/obj/Debug/net8.0/GameBrain.csproj.CoreCompileInputs.cache
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/GameBrain/obj/Debug/net8.0/GameBrain.dll
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/GameBrain/obj/Debug/net8.0/refint/GameBrain.dll
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/GameBrain/obj/Debug/net8.0/GameBrain.pdb
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/GameBrain/obj/Debug/net8.0/ref/GameBrain.dll
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/GameBrain/bin/Debug/net8.0/Domain.dll
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/GameBrain/bin/Debug/net8.0/Domain.pdb
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/GameBrain/obj/Debug/net8.0/GameBrain.csproj.AssemblyReference.cache
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/GameBrain/obj/Debug/net8.0/GameBrain.csproj.Up2Date

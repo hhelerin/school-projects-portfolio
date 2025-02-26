@@ -1,0 +1,67 @@
+@page
+@using GameBrain
+@model MoveGrid
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/css/PlayGame.css" />
+</head>
+<body>
+@{
+    var gridStartX = Model.TicTacTwoBrain.GetGridLocation()[0];
+    var gridStartY = Model.TicTacTwoBrain.GetGridLocation()[1];
+    int gridSize = Model.TicTacTwoBrain.GetGridSize();
+    bool isOngoing = Model.TicTacTwoBrain.GetStatus() == EGameStatus.Ongoing;
+}
+
+@if (isOngoing)
+{
+    <div>It's player @Model.TicTacTwoBrain.GetNextMoveBy()'s turn.  Playing as @(Model.TicTacTwoBrain.GetPlayerX() == Model.TicTacTwoBrain.GetNextMoveBy() ? "X" : "O").</div>
+    <p>Move the grid to a new position:</p>
+    <div class="grid-controls">
+        <form method="post">
+            <input type="hidden" name="GameId" value="@Model.GameId" />
+            <input type="hidden" name="UserName" value="@Model.UserName" />
+            
+            <button type="submit" name="direction" class="btn btn-primary" style="visibility: @(Model.CanMoveUp ? "visible" : "hidden")" value="up">Move Up</button>
+            <button type="submit" name="direction" class="btn btn-primary" style="visibility: @(Model.CanMoveDown ? "visible" : "hidden")" value="down">Move Down</button>
+            <button type="submit" name="direction" class="btn btn-primary" style="visibility: @(Model.CanMoveLeft ? "visible" : "hidden")" value="left">Move Left</button>
+            <button type="submit" name="direction" class="btn btn-primary" style="visibility: @(Model.CanMoveRight ? "visible" : "hidden")" value="right">Move Right</button>
+        </form>
+    </div>
+    <div class="gameboard">
+        <table>
+            @for (int y = 0; y < Model.TicTacTwoBrain.DimY; y++)
+            {
+                <tr>
+                    @for (int x = 0; x < Model.TicTacTwoBrain.DimX; x++)
+                    {
+                        bool isInnerGrid = x >= gridStartX && x < (gridStartX + gridSize) &&
+                                               y >= gridStartY && y < (gridStartY + gridSize);
+                        <td class="@(isInnerGrid ? "inner-grid" : "")">
+                            @if (Model.TicTacTwoBrain.GetBoard()[x][y] == "Empty")
+                            {
+                                <span>&nbsp;</span>
+                            }
+                            else
+                            {
+                                var pieceClass = Model.TicTacTwoBrain.GetBoard()[x][y] == Model.TicTacTwoBrain.GetPlayerX() ? "x-piece" : "o-piece";
+                                <span class="@pieceClass">@(Model.TicTacTwoBrain.GetBoard()[x][y] == Model.TicTacTwoBrain.GetPlayerX() ? "X" : "O")</span>
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+}
+else
+{
+    <p>Game Over: @Model.TicTacTwoBrain.GetStatus()</p>
+    <a asp-page="/Home" asp-route-username="@Model.UserName" class="btn">
+        Play again
+    </a>
+}
+</body>
+</html>

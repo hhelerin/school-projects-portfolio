@@ -1,0 +1,33 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "TIC-TAC-TWO - Welcome!";
+}
+
+<div class="center-screen">
+    <div class="game-container">
+        <div class="header">
+            <h1>TIC-TAC-TWO</h1>
+            <p class="subtitle">Enter your username to start playing!</p>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Error))
+        {
+            <div class="error-message">
+                @Model.Error
+            </div>
+        }
+
+        <form method="post" class="username-form">
+            <div asp-validation-summary="ModelOnly" class="validation-message"></div>
+
+            <div class="input-group">
+                <label asp-for="UserName" class="input-label">Your Username:</label>
+                <input asp-for="UserName" class="input-field" placeholder="e.g., Player123" />
+                <span asp-validation-for="UserName" class="validation-message"></span>
+            </div>
+
+            <button type="submit" class="btn">Let's Play!</button>
+        </form>
+    </div>
+</div>

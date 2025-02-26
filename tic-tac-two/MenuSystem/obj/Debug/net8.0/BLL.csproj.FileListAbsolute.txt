@@ -1,0 +1,11 @@
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/BLL/bin/Debug/net8.0/BLL.deps.json
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/BLL/bin/Debug/net8.0/BLL.dll
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/BLL/bin/Debug/net8.0/BLL.pdb
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/BLL/obj/Debug/net8.0/BLL.GeneratedMSBuildEditorConfig.editorconfig
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/BLL/obj/Debug/net8.0/BLL.AssemblyInfoInputs.cache
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/BLL/obj/Debug/net8.0/BLL.AssemblyInfo.cs
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/BLL/obj/Debug/net8.0/BLL.csproj.CoreCompileInputs.cache
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/BLL/obj/Debug/net8.0/BLL.dll
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/BLL/obj/Debug/net8.0/refint/BLL.dll
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/BLL/obj/Debug/net8.0/BLL.pdb
+/Users/helerin/RiderProjects/icd0008-24f/ICD0008-24f/BLL/obj/Debug/net8.0/ref/BLL.dll

@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using Base.Domain;
 
 namespace App.Domain;
 
-public class Shipment
+public class Shipment : BaseEntity
 {
     public DateOnly ShippedOn { get; set; }
     [MaxLength(128)]

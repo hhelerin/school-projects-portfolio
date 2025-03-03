@@ -25,10 +25,10 @@ public class Order : BaseEntity
 
     public EStatus Status { get; set; } = EStatus.Pending;
     
-    public Guid ShipmentID { get; set; }
+    public Guid? ShipmentID { get; set; }
     public Shipment? Shipment { get; set; } = default!;
     
-    public int PalletNumber { get; set; }
-    public DateOnly BillingDate { get; set; }
+    public int? PalletNumber { get; set; }
+    public DateOnly? BillingDate { get; set; }
 
 }

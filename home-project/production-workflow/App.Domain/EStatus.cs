@@ -5,5 +5,6 @@ public enum EStatus
  Pending,
  InProgress, 
  Completed, 
+ Shipped,
  Cancelled
 }

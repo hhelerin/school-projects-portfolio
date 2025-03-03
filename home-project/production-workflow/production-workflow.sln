@@ -13,6 +13,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Domain", "App.Domain\App.Domain.csproj", "{BC6E8B47-11D4-4A5A-A5DF-1DEB8AE1640E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!Solution items", "!Solution items", "{9D2CF8E1-744B-4571-871B-596E1CE0E6F9}"
+	ProjectSection(SolutionItems) = preProject
+		ERD_schema.png = ERD_schema.png
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

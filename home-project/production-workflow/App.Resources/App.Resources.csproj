@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Domain\Order.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Order.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Domain\Customer.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Customer.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Domain\Material.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Material.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Domain\OperationMapping.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>OperationMapping.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Domain\OrderItem.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>OrderItem.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Domain\Shipment.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Shipment.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Domain\Order.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Order.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Domain\Customer.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Customer.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Domain\Material.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Material.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Domain\OperationMapping.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>OperationMapping.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Domain\OrderItem.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>OrderItem.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Domain\Shipment.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Shipment.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+</Project>

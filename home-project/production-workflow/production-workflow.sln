@@ -14,7 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Domain", "App.Domain\Ap
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!Solution items", "!Solution items", "{9D2CF8E1-744B-4571-871B-596E1CE0E6F9}"
 	ProjectSection(SolutionItems) = preProject
-		ERD_schema.png = ERD_schema.png
+		..\..\..\..\Documents\IADB\X SEMESTER\ICD0024 C#Veebirakendused \project_proposal.pdf = ..\..\..\..\Documents\IADB\X SEMESTER\ICD0024 C#Veebirakendused \project_proposal.pdf
+		ERD-Schema.pdf = ERD-Schema.pdf
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Resources", "Base.Resources\Base.Resources.csproj", "{EB348D53-CFA2-46EA-99E9-421EB8CB1157}"

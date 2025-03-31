@@ -1,10 +1,14 @@
 ﻿using App.Domain;
+using App.Domain.Identity;
+using Domain.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace App.DAL.EF;
 
-public class AppDbContext : IdentityDbContext
+public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid, IdentityUserClaim<Guid>, AppUserRole,
+    IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
 {
     public DbSet<Customer> Customers { get; set; } 
     public DbSet<Order> Orders { get; set; }
@@ -13,6 +17,8 @@ public class AppDbContext : IdentityDbContext
     public DbSet<ProcessingStep> ProcessingSteps { get; set; }
     public DbSet<OperationMapping>  OperationMappings { get; set; }
     public DbSet<Shipment> Shipments { get; set; }
+    
+    public DbSet<CustomersUsers> CustomersUsers { get; set; }
     
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)

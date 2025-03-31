@@ -6,5 +6,5 @@ namespace App.Domain.Identity;
 
 public class AppRole : BaseRole<AppUserRole>
 {
-    
+    public ICollection<AppUserRole>? AppUserRoles { get; set; }
 }

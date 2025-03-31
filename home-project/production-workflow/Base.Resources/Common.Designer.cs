@@ -62,5 +62,11 @@ namespace Base.Resources {
                 return ResourceManager.GetString("Order", resourceCulture);
             }
         }
+        
+        public static string AppUser {
+            get {
+                return ResourceManager.GetString("AppUser", resourceCulture);
+            }
+        }
     }
 }

@@ -27,4 +27,7 @@
     <data name="Order" xml:space="preserve">
         <value>Tellimus</value>
     </data>
+    <data name="AppUser" xml:space="preserve">
+        <value>Kasutaja</value>
+    </data>
 </root>

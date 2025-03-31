@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using App.Domain.Identity;
 using Base.Domain;
 
 namespace App.Domain;
@@ -27,4 +28,6 @@ public class Customer : BaseEntity
     
     [Display(Name = nameof(Shipments), Prompt = nameof(Shipments), ResourceType = typeof(App.Resources.Domain.Customer))]
     public ICollection<Shipment>? Shipments { get; set; }
+    [Display(Name = nameof(AppUser), Prompt = nameof(AppUser), ResourceType = typeof(Base.Resources.Common))]
+    public ICollection<CustomersUsers>? CustomersUsers { get; set; }
 }

@@ -1,6 +1,7 @@
 using System.Globalization;
 using App.DAL.EF;
 using App.Domain.Identity;
+using Base.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
@@ -42,11 +43,16 @@ else
 }
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddIdentity<AppUser, AppRole>(o => 
-        o.SignIn.RequireConfirmedAccount = false)
-    .AddDefaultUI()
+builder.Services
+    .AddIdentityCore<AppUser>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = false;
+    })
+    .AddRoles<AppRole>()
     .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
+    .AddDefaultTokenProviders()
+    .AddDefaultUI();
+
 
 builder.Services.AddControllersWithViews();
 

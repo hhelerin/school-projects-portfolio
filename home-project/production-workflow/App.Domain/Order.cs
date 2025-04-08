@@ -36,6 +36,7 @@ public class Order : BaseEntity
     public string? Details { get; set; }
     [Display(Name = nameof(Status), Prompt = nameof(Status), ResourceType = typeof(App.Resources.Domain.Order))]
     public EStatus Status { get; set; } = EStatus.Pending;
+    
     [Display(Name = nameof(Shipment), Prompt = nameof(Shipment), ResourceType = typeof(App.Resources.Domain.Order))]
     public Guid? ShipmentID { get; set; }
     
@@ -48,4 +49,12 @@ public class Order : BaseEntity
     [Display(Name = nameof(BillingDate), Prompt = nameof(BillingDate), ResourceType = typeof(App.Resources.Domain.Order))]
     public DateOnly? BillingDate { get; set; }
 
+    public enum EStatus
+    {
+        Pending = 1,
+        InProgress = 2, 
+        Completed = 3, 
+        Shipped = 4,
+        Cancelled = 5
+    }
 }

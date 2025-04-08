@@ -1,4 +1,4 @@
-namespace Base.Contracts;
+namespace Contracts;
 
 public interface IDomainId : IDomainId<Guid>
 {

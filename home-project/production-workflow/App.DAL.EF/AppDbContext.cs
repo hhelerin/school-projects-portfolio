@@ -16,7 +16,6 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid, IdentityUs
     public DbSet<ProcessingStep> ProcessingSteps { get; set; }
     public DbSet<OperationMapping>  OperationMappings { get; set; }
     public DbSet<Shipment> Shipments { get; set; }
-    
     public DbSet<CustomersUsers> CustomersUsers { get; set; }
     
     public AppDbContext(DbContextOptions<AppDbContext> options)

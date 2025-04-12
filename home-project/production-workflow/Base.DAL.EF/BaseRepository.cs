@@ -41,12 +41,6 @@ public class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey>
         return query;
     }
 
-    // TODO: Implement UOW, remove SaveChangesAsync from repository
-    public async Task<int> SaveChangesAsync()
-    {
-        return await RepositoryDbContext.SaveChangesAsync();
-    }
-
     public virtual IEnumerable<TEntity> All(TKey? userId)
     {
         return GetQuery(userId)

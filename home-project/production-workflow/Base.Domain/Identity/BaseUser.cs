@@ -6,7 +6,6 @@ namespace Base.Domain.Identity;
 public abstract class BaseUser<TUserRole> : BaseUser<Guid, TUserRole>
 where TUserRole : class //BaseUserRole<BaseUser<TUserRole>, BaseRole<TUserRole>>
 {
-    
 }
 
 

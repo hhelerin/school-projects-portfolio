@@ -4,6 +4,10 @@ namespace Base.Domain;
 
 public abstract class BaseEntity : BaseEntity<Guid>, IDomainId
 {
+    public BaseEntity()
+    {
+        Id = Guid.NewGuid();
+    }
 }
 
 public abstract class BaseEntity<TKey>: IDomainId<TKey>

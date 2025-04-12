@@ -1,29 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using App.DAL.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
 using App.Domain;
+using Base.Helpers;
 
 namespace WebApp.Controllers
 {
     public class ShipmentsController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUOW _uow;
 
-        public ShipmentsController(AppDbContext context)
+        public ShipmentsController(IAppUOW uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: Shipments
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Shipments.Include(s => s.Customer);
-            return View(await appDbContext.ToListAsync());
+            return View(await _uow.ShipmentRepository.AllAsync());
         }
 
         // GET: Shipments/Details/5
@@ -34,9 +30,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var shipment = await _context.Shipments
-                .Include(s => s.Customer)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var shipment = await _uow.ShipmentRepository.FindAsync(id.Value, User.GetUserId());
             if (shipment == null)
             {
                 return NotFound();
@@ -46,9 +40,9 @@ namespace WebApp.Controllers
         }
 
         // GET: Shipments/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address");
+            ViewData["CustomerId"] = new SelectList(await _uow.ShipmentRepository.AllAsync(), "Id", "Address");
             return View();
         }
 
@@ -61,12 +55,11 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                shipment.Id = Guid.NewGuid();
-                _context.Add(shipment);
-                await _context.SaveChangesAsync();
+                _uow.ShipmentRepository.Add(shipment);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", shipment.CustomerId);
+            ViewData["CustomerId"] = new SelectList(await _uow.ShipmentRepository.AllAsync(), "Id", "Address", shipment.CustomerId);
             return View(shipment);
         }
 
@@ -78,12 +71,12 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var shipment = await _context.Shipments.FindAsync(id);
+            var shipment = await _uow.ShipmentRepository.FindAsync(id.Value, User.GetUserId());
             if (shipment == null)
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", shipment.CustomerId);
+            ViewData["CustomerId"] = new SelectList(await _uow.ShipmentRepository.AllAsync(), "Id", "Address", shipment.CustomerId);
             return View(shipment);
         }
 
@@ -103,12 +96,12 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(shipment);
-                    await _context.SaveChangesAsync();
+                    _uow.ShipmentRepository.Update(shipment);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ShipmentExists(shipment.Id))
+                    if (!await _uow.ShipmentRepository.ExistsAsync(shipment.Id))
                     {
                         return NotFound();
                     }
@@ -119,7 +112,7 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", shipment.CustomerId);
+            ViewData["CustomerId"] = new SelectList(await _uow.ShipmentRepository.AllAsync(), "Id", "Address", shipment.CustomerId);
             return View(shipment);
         }
 
@@ -131,9 +124,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var shipment = await _context.Shipments
-                .Include(s => s.Customer)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var shipment = await _uow.ShipmentRepository.FindAsync(id.Value, User.GetUserId());
             if (shipment == null)
             {
                 return NotFound();
@@ -147,19 +138,15 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var shipment = await _context.Shipments.FindAsync(id);
+            var shipment = await _uow.ShipmentRepository.FindAsync(id);
             if (shipment != null)
             {
-                _context.Shipments.Remove(shipment);
+                _uow.ShipmentRepository.Remove(shipment);
             }
 
-            await _context.SaveChangesAsync();
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-        private bool ShipmentExists(Guid id)
-        {
-            return _context.Shipments.Any(e => e.Id == id);
-        }
+        
     }
 }

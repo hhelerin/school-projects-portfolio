@@ -1,28 +1,24 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using App.DAL.Contracts;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
 using App.Domain;
+using Base.Helpers;
 
 namespace WebApp.Controllers
 {
     public class MaterialsController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUOW _uow;
 
-        public MaterialsController(AppDbContext context)
+        public MaterialsController(IAppUOW uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: Materials
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Materials.ToListAsync());
+            return View(await _uow.MaterialRepository.AllAsync());
         }
 
         // GET: Materials/Details/5
@@ -33,8 +29,8 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var material = await _context.Materials
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var material = await _uow.MaterialRepository.FindAsync(id.Value, User.GetUserId());
+            
             if (material == null)
             {
                 return NotFound();
@@ -58,9 +54,8 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                material.Id = Guid.NewGuid();
-                _context.Add(material);
-                await _context.SaveChangesAsync();
+                _uow.MaterialRepository.Add(material);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(material);
@@ -74,7 +69,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var material = await _context.Materials.FindAsync(id);
+            var material = await _uow.MaterialRepository.FindAsync(id.Value, User.GetUserId());
             if (material == null)
             {
                 return NotFound();
@@ -98,12 +93,12 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(material);
-                    await _context.SaveChangesAsync();
+                    _uow.MaterialRepository.Update(material);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MaterialExists(material.Id))
+                    if (!await _uow.MaterialRepository.ExistsAsync(material.Id))
                     {
                         return NotFound();
                     }
@@ -125,8 +120,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var material = await _context.Materials
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var material = await _uow.MaterialRepository.FindAsync(id.Value, User.GetUserId());
             if (material == null)
             {
                 return NotFound();
@@ -140,19 +134,15 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var material = await _context.Materials.FindAsync(id);
+            var material = await _uow.MaterialRepository.FindAsync(id);
             if (material != null)
             {
-                _context.Materials.Remove(material);
+                _uow.MaterialRepository.Remove(material);
             }
 
-            await _context.SaveChangesAsync();
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-        private bool MaterialExists(Guid id)
-        {
-            return _context.Materials.Any(e => e.Id == id);
-        }
+        
     }
 }

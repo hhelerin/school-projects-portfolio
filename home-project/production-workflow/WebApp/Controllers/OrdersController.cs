@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using App.DAL.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,111 +9,103 @@ namespace WebApp.Controllers
 {
     public class OrdersController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUOW _uow;
 
-        public OrdersController(AppDbContext context)
+        public OrdersController(IAppUOW uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: Orders
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Orders.Include(o => o.Customer).Include(o => o.Material).Include(o => o.Shipment);
-            return View(await appDbContext.ToListAsync());
+            var orders = await _uow.OrderRepository
+                .AllAsync();
+            return View(orders);
         }
 
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var order = await _context.Orders
-                .Include(o => o.Customer)
-                .Include(o => o.Material)
-                .Include(o => o.Shipment)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (order == null)
-            {
-                return NotFound();
-            }
+            var order = await _uow.OrderRepository.FindAsync(id.Value); 
+            if (order == null) return NotFound();
 
             return View(order);
         }
 
         // GET: Orders/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address");
-            ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name");
-            ViewData["ShipmentID"] = new SelectList(_context.Shipments, "Id", "Method");
+            ViewData["CustomerId"] = new SelectList(await _uow.CustomerRepository.AllAsync(), "Id", "Address");
+            ViewData["MaterialId"] = new SelectList(await _uow.MaterialRepository.AllAsync(), "Id", "Name");
+            ViewData["ShipmentID"] = new SelectList(await _uow.ShipmentRepository.AllAsync(), "Id", "Method");
             return View();
         }
 
         // POST: Orders/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerId,MaterialId,OrderNumber,Name,OrderDate,Deadline,TotalAmount,TotalArea,LinearMeter,Details,Status,ShipmentID,PalletNumber,BillingDate,Id")] Order order)
+        public async Task<IActionResult> Create(
+            [Bind(
+                "CustomerId,MaterialId,OrderNumber,Name,OrderDate,Deadline,TotalAmount,TotalArea,LinearMeter,Details,Status,ShipmentID,PalletNumber,BillingDate,Id")]
+            Order order)
         {
             if (ModelState.IsValid)
             {
                 order.Id = Guid.NewGuid();
-                _context.Add(order);
-                await _context.SaveChangesAsync();
+                _uow.OrderRepository.Add(order);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", order.CustomerId);
-            ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name", order.MaterialId);
-            ViewData["ShipmentID"] = new SelectList(_context.Shipments, "Id", "Method", order.ShipmentID);
+
+            ViewData["CustomerId"] =
+                new SelectList(await _uow.CustomerRepository.AllAsync(), "Id", "Address", order.CustomerId);
+            ViewData["MaterialId"] =
+                new SelectList(await _uow.MaterialRepository.AllAsync(), "Id", "Name", order.MaterialId);
+            ViewData["ShipmentID"] =
+                new SelectList(await _uow.ShipmentRepository.AllAsync(), "Id", "Method", order.ShipmentID);
             return View(order);
         }
 
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var order = await _context.Orders.FindAsync(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", order.CustomerId);
-            ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name", order.MaterialId);
-            ViewData["ShipmentID"] = new SelectList(_context.Shipments, "Id", "Method", order.ShipmentID);
+            var order = await _uow.OrderRepository.FindAsync(id.Value);
+            if (order == null) return NotFound();
+
+            ViewData["CustomerId"] =
+                new SelectList(await _uow.CustomerRepository.AllAsync(), "Id", "Address", order.CustomerId);
+            ViewData["MaterialId"] =
+                new SelectList(await _uow.MaterialRepository.AllAsync(), "Id", "Name", order.MaterialId);
+            ViewData["ShipmentID"] =
+                new SelectList(await _uow.ShipmentRepository.AllAsync(), "Id", "Method", order.ShipmentID);
             return View(order);
         }
 
         // POST: Orders/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("CustomerId,MaterialId,OrderNumber,Name,OrderDate,Deadline,TotalAmount,TotalArea,LinearMeter,Details,Status,ShipmentID,PalletNumber,BillingDate,Id")] Order order)
+        public async Task<IActionResult> Edit(Guid id,
+            [Bind(
+                "CustomerId,MaterialId,OrderNumber,Name,OrderDate,Deadline,TotalAmount,TotalArea,LinearMeter,Details,Status,ShipmentID,PalletNumber,BillingDate,Id")]
+            Order order)
         {
-            if (id != order.Id)
-            {
-                return NotFound();
-            }
+            if (id != order.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(order);
-                    await _context.SaveChangesAsync();
+                    _uow.OrderRepository.Update(order);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderExists(order.Id))
+                    if (!await _uow.OrderRepository.ExistsAsync(order.Id))
                     {
                         return NotFound();
                     }
@@ -125,31 +114,26 @@ namespace WebApp.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", order.CustomerId);
-            ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name", order.MaterialId);
-            ViewData["ShipmentID"] = new SelectList(_context.Shipments, "Id", "Method", order.ShipmentID);
+
+            ViewData["CustomerId"] =
+                new SelectList(await _uow.CustomerRepository.AllAsync(), "Id", "Address", order.CustomerId);
+            ViewData["MaterialId"] =
+                new SelectList(await _uow.MaterialRepository.AllAsync(), "Id", "Name", order.MaterialId);
+            ViewData["ShipmentID"] =
+                new SelectList(await _uow.ShipmentRepository.AllAsync(), "Id", "Method", order.ShipmentID);
             return View(order);
         }
 
         // GET: Orders/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var order = await _context.Orders
-                .Include(o => o.Customer)
-                .Include(o => o.Material)
-                .Include(o => o.Shipment)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (order == null)
-            {
-                return NotFound();
-            }
+            var order = await _uow.OrderRepository.FindAsync(id.Value);
+            if (order == null) return NotFound();
 
             return View(order);
         }
@@ -159,19 +143,9 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var order = await _context.Orders.FindAsync(id);
-            if (order != null)
-            {
-                _context.Orders.Remove(order);
-            }
-
-            await _context.SaveChangesAsync();
+            await _uow.OrderRepository.RemoveAsync(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool OrderExists(Guid id)
-        {
-            return _context.Orders.Any(e => e.Id == id);
         }
     }
 }

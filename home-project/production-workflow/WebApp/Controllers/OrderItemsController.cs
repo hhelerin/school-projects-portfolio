@@ -1,29 +1,26 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using App.DAL.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
 using App.Domain;
+using Base.Helpers;
 
 namespace WebApp.Controllers
 {
     public class OrderItemsController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUOW _uow;
 
-        public OrderItemsController(AppDbContext context)
+        public OrderItemsController(IAppUOW uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: OrderItems
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.OrderItems.Include(o => o.Order);
-            return View(await appDbContext.ToListAsync());
+            var orderItems = _uow.OrderItemRepository.AllAsync();
+            return View(await orderItems);
         }
 
         // GET: OrderItems/Details/5
@@ -34,9 +31,8 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var orderItem = await _context.OrderItems
-                .Include(o => o.Order)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var orderItem = await _uow.OrderItemRepository.FindAsync(id.Value, User.GetUserId());
+
             if (orderItem == null)
             {
                 return NotFound();
@@ -46,9 +42,9 @@ namespace WebApp.Controllers
         }
 
         // GET: OrderItems/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Name");
+            ViewData["OrderId"] = new SelectList(await _uow.OrderItemRepository.AllAsync(), "Id", "Name");
             return View();
         }
 
@@ -62,11 +58,11 @@ namespace WebApp.Controllers
             if (ModelState.IsValid)
             {
                 orderItem.Id = Guid.NewGuid();
-                _context.Add(orderItem);
-                await _context.SaveChangesAsync();
+                _uow.OrderItemRepository.Add(orderItem);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Name", orderItem.OrderId);
+            ViewData["OrderId"] = new SelectList(await _uow.OrderItemRepository.AllAsync(), "Id", "Name", orderItem.OrderId);
             return View(orderItem);
         }
 
@@ -78,12 +74,12 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var orderItem = await _context.OrderItems.FindAsync(id);
+            var orderItem = await _uow.OrderItemRepository.FindAsync(id.Value, User.GetUserId());
             if (orderItem == null)
             {
                 return NotFound();
             }
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Name", orderItem.OrderId);
+            ViewData["OrderId"] = new SelectList(await _uow.OrderItemRepository.AllAsync(), "Id", "Name", orderItem.OrderId);
             return View(orderItem);
         }
 
@@ -103,12 +99,12 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(orderItem);
-                    await _context.SaveChangesAsync();
+                    _uow.OrderItemRepository.Update(orderItem);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderItemExists(orderItem.Id))
+                    if (!await _uow.OrderItemRepository.ExistsAsync(id))
                     {
                         return NotFound();
                     }
@@ -119,7 +115,7 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Name", orderItem.OrderId);
+            ViewData["OrderId"] = new SelectList(await _uow.OrderItemRepository.AllAsync(), "Id", "Name", orderItem.OrderId);
             return View(orderItem);
         }
 
@@ -131,9 +127,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var orderItem = await _context.OrderItems
-                .Include(o => o.Order)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var orderItem = await _uow.OrderItemRepository.FindAsync(id.Value, User.GetUserId());
             if (orderItem == null)
             {
                 return NotFound();
@@ -147,19 +141,15 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var orderItem = await _context.OrderItems.FindAsync(id);
+            var orderItem = await _uow.OrderItemRepository.FindAsync(id);
             if (orderItem != null)
             {
-                _context.OrderItems.Remove(orderItem);
+                _uow.OrderItemRepository.Remove(orderItem);
             }
 
-            await _context.SaveChangesAsync();
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-        private bool OrderItemExists(Guid id)
-        {
-            return _context.OrderItems.Any(e => e.Id == id);
-        }
+        
     }
 }

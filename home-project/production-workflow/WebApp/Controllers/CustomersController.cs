@@ -2,27 +2,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.DAL.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using App.DAL.EF;
 using App.Domain;
+using Base.Helpers;
 
 namespace WebApp.Controllers
 {
     public class CustomersController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUOW _uow;
 
-        public CustomersController(AppDbContext context)
+        public CustomersController(IAppUOW uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Customers.ToListAsync());
+            return View(await _uow.CustomerRepository.AllAsync());
         }
 
         // GET: Customers/Details/5
@@ -33,8 +35,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var customer = await _uow.CustomerRepository.FindAsync(id.Value, User.GetUserId());
             if (customer == null)
             {
                 return NotFound();
@@ -59,8 +60,8 @@ namespace WebApp.Controllers
             if (ModelState.IsValid)
             {
                 customer.Id = Guid.NewGuid();
-                _context.Add(customer);
-                await _context.SaveChangesAsync();
+                _uow.CustomerRepository.Add(customer);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(customer);
@@ -74,7 +75,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _uow.CustomerRepository.FindAsync(id.Value, User.GetUserId());
             if (customer == null)
             {
                 return NotFound();
@@ -98,12 +99,12 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(customer);
-                    await _context.SaveChangesAsync();
+                    _uow.CustomerRepository.Update(customer);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomerExists(customer.Id))
+                    if (!await _uow.CustomerRepository.ExistsAsync(customer.Id))
                     {
                         return NotFound();
                     }
@@ -125,8 +126,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var customer = await _uow.CustomerRepository.FindAsync(id.Value, User.GetUserId());
             if (customer == null)
             {
                 return NotFound();
@@ -140,19 +140,10 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer != null)
-            {
-                _context.Customers.Remove(customer);
-            }
-
-            await _context.SaveChangesAsync();
+            await _uow.CustomerRepository.RemoveAsync(id, User.GetUserId());
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-        private bool CustomerExists(Guid id)
-        {
-            return _context.Customers.Any(e => e.Id == id);
-        }
+        
     }
 }

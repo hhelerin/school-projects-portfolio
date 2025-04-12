@@ -1,29 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using App.DAL.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
 using App.Domain;
+using Base.Helpers;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
     public class OperationMappingsController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUOW _uow;
 
-        public OperationMappingsController(AppDbContext context)
+        public OperationMappingsController(IAppUOW uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: OperationMappings
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.OperationMappings.Include(o => o.Order).Include(o => o.ProcessingStep);
-            return View(await appDbContext.ToListAsync());
+            var operationMappings = _uow.OperationMappingRepository.AllAsync();
+            return View(await operationMappings);
         }
 
         // GET: OperationMappings/Details/5
@@ -34,24 +32,29 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var operationMapping = await _context.OperationMappings
-                .Include(o => o.Order)
-                .Include(o => o.ProcessingStep)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (operationMapping == null)
+            var entity = await _uow.OperationMappingRepository.FindAsync(id.Value, User.GetUserId());
+
+
+            if (entity == null)
             {
                 return NotFound();
             }
 
-            return View(operationMapping);
+            return View(entity);
         }
 
-        // GET: OperationMappings/Create
-        public IActionResult Create()
+
+// GET: OperationMappings/Create
+        public async Task<IActionResult> Create()
         {
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Name");
-            ViewData["ProcessingStepId"] = new SelectList(_context.ProcessingSteps, "Id", "Name");
-            return View();
+            var vm = new OperationMappingCreateEditViewModel
+            {
+                OperationMapping = new OperationMapping(),
+                OrderSelectList = new SelectList(await _uow.OrderRepository.AllAsync(), "Id", "Name"),
+                ProcessingStepSelectList = new SelectList(await _uow.ProcessingStepRepository.AllAsync(), "Id", "Name")
+            };
+
+            return View(vm);
         }
 
         // POST: OperationMappings/Create
@@ -59,36 +62,38 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProcessingStepId,OrderId,PrerequisitesObtained,CompletedAt,Details,Id")] OperationMapping operationMapping)
-        {
+        public async Task<IActionResult> Create(OperationMappingCreateEditViewModel vm)
+        {   
             if (ModelState.IsValid)
             {
-                operationMapping.Id = Guid.NewGuid();
-                _context.Add(operationMapping);
-                await _context.SaveChangesAsync();
+                vm.OperationMapping.Id = Guid.NewGuid(); // Or let DB assign if configured
+                _uow.OperationMappingRepository.Add(vm.OperationMapping);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Name", operationMapping.OrderId);
-            ViewData["ProcessingStepId"] = new SelectList(_context.ProcessingSteps, "Id", "Name", operationMapping.ProcessingStepId);
-            return View(operationMapping);
+
+            vm.OrderSelectList = new SelectList(await _uow.OrderRepository.AllAsync(), "Id", "Name", vm.OperationMapping.OrderId);
+            vm.ProcessingStepSelectList = new SelectList(await _uow.ProcessingStepRepository.AllAsync(), "Id", "Name", vm.OperationMapping.ProcessingStepId);
+
+            return View(vm);
         }
 
         // GET: OperationMappings/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var operationMapping = await _context.OperationMappings.FindAsync(id);
-            if (operationMapping == null)
+            var entity = await _uow.OperationMappingRepository.FindAsync(id.Value, User.GetUserId());
+            if (entity == null) return NotFound();
+
+            var vm = new OperationMappingCreateEditViewModel
             {
-                return NotFound();
-            }
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Name", operationMapping.OrderId);
-            ViewData["ProcessingStepId"] = new SelectList(_context.ProcessingSteps, "Id", "Name", operationMapping.ProcessingStepId);
-            return View(operationMapping);
+                OperationMapping = entity,
+                OrderSelectList = new SelectList(await _uow.OrderRepository.AllAsync(), "Id", "Name", entity.OrderId),
+                ProcessingStepSelectList = new SelectList(await _uow.ProcessingStepRepository.AllAsync(), "Id", "Name", entity.ProcessingStepId)
+            };
+
+            return View(vm);
         }
 
         // POST: OperationMappings/Edit/5
@@ -96,9 +101,9 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ProcessingStepId,OrderId,PrerequisitesObtained,CompletedAt,Details,Id")] OperationMapping operationMapping)
+        public async Task<IActionResult> Edit(Guid id, OperationMappingCreateEditViewModel vm)
         {
-            if (id != operationMapping.Id)
+            if (id != vm.OperationMapping.Id)
             {
                 return NotFound();
             }
@@ -107,12 +112,12 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(operationMapping);
-                    await _context.SaveChangesAsync();
+                    _uow.OperationMappingRepository.Update(vm.OperationMapping);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OperationMappingExists(operationMapping.Id))
+                    if (!await _uow.OperationMappingRepository.ExistsAsync(vm.OperationMapping.Id))
                     {
                         return NotFound();
                     }
@@ -121,11 +126,15 @@ namespace WebApp.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Name", operationMapping.OrderId);
-            ViewData["ProcessingStepId"] = new SelectList(_context.ProcessingSteps, "Id", "Name", operationMapping.ProcessingStepId);
-            return View(operationMapping);
+
+    
+            vm.OrderSelectList = new SelectList(await _uow.OrderRepository.AllAsync(), "Id", "Name", vm.OperationMapping.OrderId);
+            vm.ProcessingStepSelectList = new SelectList(await _uow.ProcessingStepRepository.AllAsync(), "Id", "Name", vm.OperationMapping.ProcessingStepId);
+
+            return View(vm);
         }
 
         // GET: OperationMappings/Delete/5
@@ -136,10 +145,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var operationMapping = await _context.OperationMappings
-                .Include(o => o.Order)
-                .Include(o => o.ProcessingStep)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var operationMapping = await _uow.OperationMappingRepository.FindAsync(id.Value, User.GetUserId());
             if (operationMapping == null)
             {
                 return NotFound();
@@ -153,19 +159,15 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var operationMapping = await _context.OperationMappings.FindAsync(id);
+            var operationMapping = await _uow.OperationMappingRepository.FindAsync(id);
             if (operationMapping != null)
             {
-                _context.OperationMappings.Remove(operationMapping);
+                _uow.OperationMappingRepository.Remove(operationMapping);
             }
 
-            await _context.SaveChangesAsync();
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OperationMappingExists(Guid id)
-        {
-            return _context.OperationMappings.Any(e => e.Id == id);
-        }
     }
 }

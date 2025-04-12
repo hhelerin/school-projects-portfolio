@@ -1,29 +1,31 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using App.DAL.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
 using App.Domain;
+using App.Domain.Identity;
+using Base.Helpers;
+using Microsoft.AspNetCore.Identity;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
     public class CustomersUsersController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUOW _uow;
+        private readonly UserManager<AppUser> _userManager;
 
-        public CustomersUsersController(AppDbContext context)
+        public CustomersUsersController(IAppUOW uow, UserManager<AppUser> userManager)
         {
-            _context = context;
+            _uow = uow;
+            _userManager = userManager;
         }
 
         // GET: CustomersUsers
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.CustomersUsers.Include(c => c.Customer).Include(c => c.User);
-            return View(await appDbContext.ToListAsync());
+            var customersUsers = _uow.CustomersUsersRepository.AllAsync();
+            return View(await customersUsers);
         }
 
         // GET: CustomersUsers/Details/5
@@ -34,24 +36,28 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var customersUsers = await _context.CustomersUsers
-                .Include(c => c.Customer)
-                .Include(c => c.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (customersUsers == null)
+            var entity = await _uow.CustomersUsersRepository.FindAsync(id.Value, User.GetUserId());
+
+
+            if (entity == null)
             {
                 return NotFound();
             }
 
-            return View(customersUsers);
+            return View(entity);
         }
 
         // GET: CustomersUsers/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
-            return View();
+            var vm = new CustomersUsersCreateEditViewModel()
+            {
+                CustomerSelectList = new SelectList(await _uow.CustomerRepository.AllAsync(), "Id", "Address"),
+                UserSelectList = new SelectList(_userManager.Users.ToList(), "Id", "Id")
+
+            };
+            
+            return View(vm);
         }
 
         // POST: CustomersUsers/Create
@@ -59,18 +65,30 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerId,Id,UserId")] CustomersUsers customersUsers)
+        public async Task<IActionResult> Create(CustomersUsersCreateEditViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                customersUsers.Id = Guid.NewGuid();
-                _context.Add(customersUsers);
-                await _context.SaveChangesAsync();
+                _uow.CustomersUsersRepository.Add(vm.CustomersUsers);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", customersUsers.CustomerId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", customersUsers.UserId);
-            return View(customersUsers);
+
+            vm.CustomerSelectList = new SelectList(
+                await _uow.CustomerRepository.AllAsync(),
+                nameof(Customer.Id),
+                nameof(Customer.Address),
+                vm.CustomersUsers.CustomerId
+            );
+
+            vm.UserSelectList = new SelectList(
+                _userManager.Users.ToList(),
+                "Id",
+                "Id",
+                vm.CustomersUsers.UserId
+            );
+
+            return View(vm);
         }
 
         // GET: CustomersUsers/Edit/5
@@ -81,13 +99,13 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var customersUsers = await _context.CustomersUsers.FindAsync(id);
+            var customersUsers = await _uow.CustomersUsersRepository.FindAsync(id.Value, User.GetUserId());
             if (customersUsers == null)
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", customersUsers.CustomerId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", customersUsers.UserId);
+            ViewData["CustomerId"] = new SelectList(await _uow.CustomerRepository.AllAsync(), "Id", "Address", customersUsers.CustomerId);
+            ViewData["UserId"] = new SelectList(_userManager.Users.ToList(), "Id", "Id", customersUsers.UserId);
             return View(customersUsers);
         }
 
@@ -107,12 +125,12 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(customersUsers);
-                    await _context.SaveChangesAsync();
+                    _uow.CustomersUsersRepository.Update(customersUsers);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomersUsersExists(customersUsers.Id))
+                    if (!await _uow.CustomersUsersRepository.ExistsAsync(customersUsers.Id))
                     {
                         return NotFound();
                     }
@@ -123,8 +141,8 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", customersUsers.CustomerId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", customersUsers.UserId);
+            ViewData["CustomerId"] = new SelectList(await _uow.CustomerRepository.AllAsync(), "Id", "Address", customersUsers.CustomerId);
+            ViewData["UserId"] = new SelectList(_userManager.Users.ToList(), "Id", "Id", customersUsers.UserId);
             return View(customersUsers);
         }
 
@@ -136,10 +154,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var customersUsers = await _context.CustomersUsers
-                .Include(c => c.Customer)
-                .Include(c => c.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var customersUsers =  await _uow.CustomersUsersRepository.FindAsync(id.Value, User.GetUserId());
             if (customersUsers == null)
             {
                 return NotFound();
@@ -153,19 +168,14 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var customersUsers = await _context.CustomersUsers.FindAsync(id);
+            var customersUsers = await _uow.CustomersUsersRepository.FindAsync(id);
             if (customersUsers != null)
             {
-                _context.CustomersUsers.Remove(customersUsers);
+                _uow.CustomersUsersRepository.Remove(customersUsers);
             }
 
-            await _context.SaveChangesAsync();
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CustomersUsersExists(Guid id)
-        {
-            return _context.CustomersUsers.Any(e => e.Id == id);
         }
     }
 }

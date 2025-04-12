@@ -1,7 +1,7 @@
 using System.Globalization;
+using App.DAL.Contracts;
 using App.DAL.EF;
 using App.Domain.Identity;
-using Base.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
@@ -9,11 +9,14 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Options;
 
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+
 if (builder.Environment.IsProduction())
 {
     builder.Services.AddDbContext<AppDbContext>(options =>
@@ -41,20 +44,22 @@ else
             .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution)
     );
 }
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services
-    .AddIdentityCore<AppUser>(options =>
-    {
-        options.SignIn.RequireConfirmedAccount = false;
-    })
-    .AddRoles<AppRole>()
+
+builder.Services.AddScoped<IAppUOW, AppUOW>();
+
+builder.Services.AddIdentity<AppUser, AppRole>(o => 
+        o.SignIn.RequireConfirmedAccount = false)
+    .AddDefaultUI()
     .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders()
-    .AddDefaultUI();
+    .AddDefaultTokenProviders();
 
 
 builder.Services.AddControllersWithViews();
+
+// add culture switching support
 
 var supportedCultures = builder.Configuration
     .GetSection("SupportedCultures")
@@ -70,7 +75,9 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.SupportedUICultures = supportedCultures;
     // if nothing is found, use this
     options.DefaultRequestCulture =
-        new RequestCulture(builder.Configuration["DefaultCulture"]!, builder.Configuration["DefaultCulture"]!);
+        new RequestCulture(
+            builder.Configuration["DefaultCulture"]!,
+            builder.Configuration["DefaultCulture"]!);
     options.SetDefaultCulture(builder.Configuration["DefaultCulture"]!);
 
     options.RequestCultureProviders = new List<IRequestCultureProvider>
@@ -78,7 +85,7 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
         // Order is important, it's in which order they will be evaluated
         // add support for ?culture=ru-RU
         new QueryStringRequestCultureProvider(),
-        new CookieRequestCultureProvider()
+        new CookieRequestCultureProvider(),
     };
 });
 
@@ -92,13 +99,9 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-
-app.UseRequestLocalization(options: app.Services.GetService<IOptions<RequestLocalizationOptions>>()!.Value!);
+app.UseRequestLocalization(options: app.Services.GetService<IOptions<RequestLocalizationOptions>>()!.Value);
 
 app.UseRouting();
 
@@ -115,4 +118,3 @@ app.MapRazorPages()
     .WithStaticAssets();
 
 app.Run();
-

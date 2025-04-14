@@ -9,14 +9,15 @@ namespace App.DAL.EF;
 public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid, IdentityUserClaim<Guid>, AppUserRole,
     IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
 {
-    public DbSet<Customer> Customers { get; set; } 
-    public DbSet<Order> Orders { get; set; }
-    public DbSet<OrderItem> OrderItems { get; set; }
-    public DbSet<Material> Materials { get; set; }
-    public DbSet<ProcessingStep> ProcessingSteps { get; set; }
-    public DbSet<OperationMapping>  OperationMappings { get; set; }
-    public DbSet<Shipment> Shipments { get; set; }
-    public DbSet<CustomersUsers> CustomersUsers { get; set; }
+    public DbSet<Customer> Customers { get; set; }  = default!;
+    public DbSet<Order> Orders { get; set; } = default!;
+    public DbSet<OrderItem> OrderItems { get; set; } = default!;
+    public DbSet<Material> Materials { get; set; } = default!;
+    public DbSet<ProcessingStep> ProcessingSteps { get; set; } = default!;
+    public DbSet<OperationMapping>  OperationMappings { get; set; } = default!;
+    public DbSet<Shipment> Shipments { get; set; } = default!;
+    public DbSet<CustomersUsers> CustomersUsers { get; set; } = default!;
+    public DbSet<AppRefreshToken> RefreshTokens { get; set; } = default!;
     
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)

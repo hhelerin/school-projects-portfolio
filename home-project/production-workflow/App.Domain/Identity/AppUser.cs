@@ -8,4 +8,6 @@ public class AppUser : BaseUser<AppUserRole>
     [Display(Name = nameof(AppUser), Prompt = nameof(AppUser), ResourceType = typeof(Base.Resources.Common))]
     public ICollection<CustomersUsers>? CustomersUsers { get; set; }
     
+    public ICollection<AppRefreshToken>? RefreshTokens { get; set; }
+    
 }

@@ -5,11 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using App.Domain;
 using App.Domain.Identity;
 using Base.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
+    [Authorize]
     public class CustomersUsersController : Controller
     {
         private readonly IAppUOW _uow;

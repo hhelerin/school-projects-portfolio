@@ -9,9 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using App.DAL.EF;
 using App.Domain;
 using Base.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.Controllers
 {
+    [Authorize]
     public class CustomersController : Controller
     {
         private readonly IAppUOW _uow;

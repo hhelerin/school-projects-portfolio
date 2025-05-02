@@ -1,4 +1,6 @@
 using App.DAL.Contracts;
+using App.DAL.DTO;
+using App.DAL.EF.Mappers;
 using App.Domain;
 using Base.DAL.EF;
 using Microsoft.EntityFrameworkCore;
@@ -6,18 +8,18 @@ using Microsoft.EntityFrameworkCore;
 namespace App.DAL.EF.Repositories;
 
 public class OrderRepository(DbContext repositoryDbContext)
-    : BaseRepository<Order>(repositoryDbContext), IOrderRepository
+    : BaseRepository<OrderDto, Order>(repositoryDbContext, new OrderMapper()), IOrderRepository
 {
 
-    public override async Task<IEnumerable<Order>> AllAsync(Guid userId = default)
+    public override async Task<IEnumerable<OrderDto>> AllAsync(Guid userId = default)
     {
         var query = GetIncludes(GetQuery(userId));
-        return await query.ToListAsync();
+        return (await query.ToListAsync()).Select(e => Mapper.Map(e)!);
     }
-    public override async Task<Order?> FindAsync(Guid id, Guid userId = default)
+    public override async Task<OrderDto?> FindAsync(Guid id, Guid userId = default)
     {
         var query = GetIncludes(GetQuery(userId));
-        return await query.FirstOrDefaultAsync(o => o.Id == id);
+        return Mapper.Map(await query.FirstOrDefaultAsync(o => o.Id == id));
     }
     
     private IQueryable<Order> GetIncludes(IQueryable<Order> query)

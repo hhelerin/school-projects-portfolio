@@ -6,12 +6,12 @@ namespace App.DAL.EF.Mappers;
 
 public class OperationMappingMapper : IMapper<App.DAL.DTO.OperationMappingDto, App.Domain.OperationMapping>
 {
-    public OperationMapping? Map(OperationMapping? domainEntity)
+    public OperationMappingDto? Map(OperationMapping? entity)
     {
         throw new NotImplementedException();
     }
 
-    public OperationMappingDto? Map(OperationMappingDto? dalEntity)
+    public OperationMapping? Map(OperationMappingDto? entity)
     {
         throw new NotImplementedException();
     }

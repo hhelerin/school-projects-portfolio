@@ -119,6 +119,7 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     };
 });
 
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsAllowAll", policy =>

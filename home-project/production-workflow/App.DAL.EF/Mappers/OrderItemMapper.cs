@@ -4,14 +4,14 @@ using Base.DAL.Contracts;
 
 namespace App.DAL.EF.Mappers;
 
-public class OrderItemMapper : IMapper<App.DAL.DTO.OrderItemDto, App.Domain.Order >
+public class OrderItemMapper : IMapper<OrderItemDto, OrderItem>
 {
-    public Order? Map(Order? domainEntity)
+    public OrderItemDto? Map(OrderItem? entity)
     {
         throw new NotImplementedException();
     }
 
-    public OrderItemDto? Map(OrderItemDto? dalEntity)
+    public OrderItem? Map(OrderItemDto? entity)
     {
         throw new NotImplementedException();
     }

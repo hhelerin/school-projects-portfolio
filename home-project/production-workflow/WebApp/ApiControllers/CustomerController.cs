@@ -1,36 +1,39 @@
+using App.DAL.Contracts;
+using App.DAL.DTO;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
-using App.Domain;
+using Asp.Versioning;
+using Base.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
+    /// <inheritdoc />
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CustomerController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUOW _uow;
 
-        public CustomerController(AppDbContext context)
+        public CustomerController(IAppUOW uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: api/Customer
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public async Task<ActionResult<IEnumerable<CustomerDto>>> GetCustomers()
         {
-            return await _context.Customers.ToListAsync();
+            return (await _uow.CustomerRepository.AllAsync(User.GetUserId())).ToList();
         }
 
         // GET: api/Customer/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomer(Guid id)
+        public async Task<ActionResult<CustomerDto>> GetCustomer(Guid id)
         {
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _uow.CustomerRepository.FindAsync(id);
 
             if (customer == null)
             {
@@ -43,30 +46,16 @@ namespace WebApp.ApiControllers
         // PUT: api/Customer/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(Guid id, Customer customer)
+        public async Task<IActionResult> PutCustomer(Guid id, CustomerDto customerDto)
         {
-            if (id != customer.Id)
+            if (id != customerDto.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(customer).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CustomerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _uow.CustomerRepository.Update(customerDto);
+            
+            await _uow.SaveChangesAsync();
 
             return NoContent();
         }
@@ -74,33 +63,28 @@ namespace WebApp.ApiControllers
         // POST: api/Customer
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
+        public async Task<ActionResult<CustomerDto>> PostCustomer(CustomerDto customerDto)
         {
-            _context.Customers.Add(customer);
-            await _context.SaveChangesAsync();
+            _uow.CustomerRepository.Add(customerDto);
+            await _uow.SaveChangesAsync();
 
-            return CreatedAtAction("GetCustomer", new { id = customer.Id }, customer);
+            return CreatedAtAction("GetCustomer", new { id = customerDto.Id }, customerDto);
         }
 
         // DELETE: api/Customer/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(Guid id)
         {
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _uow.CustomerRepository.FindAsync(id);
             if (customer == null)
             {
                 return NotFound();
             }
 
-            _context.Customers.Remove(customer);
-            await _context.SaveChangesAsync();
+            _uow.CustomerRepository.Remove(customer);
+            await _uow.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool CustomerExists(Guid id)
-        {
-            return _context.Customers.Any(e => e.Id == id);
         }
     }
 }

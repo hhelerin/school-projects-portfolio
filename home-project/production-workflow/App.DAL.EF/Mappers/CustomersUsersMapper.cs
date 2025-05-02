@@ -4,15 +4,16 @@ using Base.DAL.Contracts;
 
 namespace App.DAL.EF.Mappers;
 
-public class ShipmentMapper : IMapper<App.DAL.DTO.ShipmentDto, App.Domain.Shipment>
+public class CustomersUsersMapper : IMapper<CustomersUsersDto, CustomersUsers>
 {
-    public ShipmentDto? Map(Shipment? entity)
+    public CustomersUsersDto? Map(CustomersUsers? entity)
     {
         throw new NotImplementedException();
     }
 
-    public Shipment? Map(ShipmentDto? entity)
+    public CustomersUsers? Map(CustomersUsersDto? entity)
     {
         throw new NotImplementedException();
     }
+    
 }

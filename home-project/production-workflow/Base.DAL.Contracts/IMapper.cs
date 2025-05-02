@@ -14,6 +14,7 @@ public interface IMapper<TDalEntity, TDomainEntity, TKey>
     where TDalEntity : class, IDomainId<TKey>
     where TDomainEntity : class, IDomainId<TKey>
 {
-    public TDomainEntity? Map(TDalEntity? entity);
     public TDalEntity? Map(TDomainEntity? entity);
+    public TDomainEntity? Map(TDalEntity? entity);
+   
 }

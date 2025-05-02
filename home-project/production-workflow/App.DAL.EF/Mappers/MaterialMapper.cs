@@ -6,12 +6,12 @@ namespace App.DAL.EF.Mappers;
 
 public class MaterialMapper : IMapper<App.DAL.DTO.MaterialDto, App.Domain.Material>
 {
-    public Material? Map(Material? domainEntity)
+    public MaterialDto? Map(Material? entity)
     {
         throw new NotImplementedException();
     }
 
-    public MaterialDto? Map(MaterialDto? dalEntity)
+    public Material? Map(MaterialDto? entity)
     {
         throw new NotImplementedException();
     }

@@ -1,4 +1,6 @@
 using App.DAL.Contracts;
+using App.DAL.DTO;
+using App.DAL.EF.Mappers;
 using App.Domain;
 using Base.DAL.EF;
 using Microsoft.EntityFrameworkCore;
@@ -6,12 +8,12 @@ using Microsoft.EntityFrameworkCore;
 namespace App.DAL.EF.Repositories;
 
 public class OrderItemRepository(DbContext repositoryDbContext)
-    : BaseRepository<OrderItem>(repositoryDbContext), IOrderItemRepository
+    : BaseRepository<OrderItemDto, OrderItem>(repositoryDbContext, new OrderItemMapper()), IOrderItemRepository
 {
-    public override async Task<IEnumerable<OrderItem>> AllAsync(Guid userId = default)
+    public override async Task<IEnumerable<OrderItemDto>> AllAsync(Guid userId = default)
     {
-        return await RepositoryDbSet
+        return (await RepositoryDbSet
             .Include(o => o.Order)
-            .ToListAsync();
+            .ToListAsync()).Select(e => Mapper.Map(e)!);
     }
 };

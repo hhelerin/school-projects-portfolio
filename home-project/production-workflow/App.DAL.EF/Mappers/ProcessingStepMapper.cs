@@ -6,12 +6,12 @@ namespace App.DAL.EF.Mappers;
 
 public class ProcessingStepMapper : IMapper<App.DAL.DTO.ProcessingStepDto, App.Domain.ProcessingStep>
 {
-    public ProcessingStep? Map(ProcessingStep? domainEntity)
+    public ProcessingStepDto? Map(ProcessingStep? entity)
     {
         throw new NotImplementedException();
     }
 
-    public ProcessingStepDto? Map(ProcessingStepDto? dalEntity)
+    public ProcessingStep? Map(ProcessingStepDto? entity)
     {
         throw new NotImplementedException();
     }

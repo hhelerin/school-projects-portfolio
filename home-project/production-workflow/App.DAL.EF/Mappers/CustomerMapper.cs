@@ -4,14 +4,14 @@ using Base.DAL.Contracts;
 
 namespace App.DAL.EF.Mappers;
 
-public class CustomerMapper : IMapper<App.DAL.DTO.CustomerDto, App.Domain.Customer>
+public class CustomerMapper : IMapper<CustomerDto, Customer>
 {
-    public Customer? Map(Customer? domainEntity)
+    public CustomerDto? Map(Customer? entity)
     {
         throw new NotImplementedException();
     }
 
-    public CustomerDto? Map(CustomerDto? dalEntity)
+    public Customer? Map(CustomerDto? entity)
     {
         throw new NotImplementedException();
     }

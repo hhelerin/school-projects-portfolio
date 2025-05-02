@@ -6,12 +6,12 @@ namespace App.DAL.EF.Mappers;
 
 public class OrderMapper : IMapper<App.DAL.DTO.OrderDto, App.Domain.Order>
 {
-    public Order? Map(Order? domainEntity)
+    public OrderDto? Map(Order? entity)
     {
         throw new NotImplementedException();
     }
 
-    public OrderDto? Map(OrderDto? dalEntity)
+    public Order? Map(OrderDto? entity)
     {
         throw new NotImplementedException();
     }

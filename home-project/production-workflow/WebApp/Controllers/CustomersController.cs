@@ -1,16 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using App.DAL.Contracts;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
-using App.Domain;
+using App.DAL.DTO;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
-
 namespace WebApp.Controllers
 {
     [Authorize]
@@ -57,16 +50,16 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Email,Phone,Address,AdditionalInfo,Id")] Customer customer)
+        public async Task<IActionResult> Create([Bind("Name,Email,Phone,Address,AdditionalInfo,Id")] CustomerDto customerDto)
         {
             if (ModelState.IsValid)
             {
-                customer.Id = Guid.NewGuid();
-                _uow.CustomerRepository.Add(customer);
+                customerDto.Id = Guid.NewGuid();
+                _uow.CustomerRepository.Add(customerDto);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(customer);
+            return View(customerDto);
         }
 
         // GET: Customers/Edit/5
@@ -90,7 +83,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Email,Phone,Address,AdditionalInfo,Id")] Customer customer)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Email,Phone,Address,AdditionalInfo,Id")] CustomerDto customer)
         {
             if (id != customer.Id)
             {

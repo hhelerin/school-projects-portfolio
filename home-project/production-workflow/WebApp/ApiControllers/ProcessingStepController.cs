@@ -1,38 +1,36 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using App.DAL.Contracts;
+using App.DAL.DTO;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
-using App.Domain;
+using Asp.Versioning;
+using Base.Helpers;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
+    /// <inheritdoc />
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class ProcessingStepController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUOW _uow;
 
-        public ProcessingStepController(AppDbContext context)
+        public ProcessingStepController(IAppUOW uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: api/ProcessingStep
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProcessingStep>>> GetProcessingSteps()
+        public async Task<ActionResult<IEnumerable<ProcessingStepDto>>> GetProcessingSteps()
         {
-            return await _context.ProcessingSteps.ToListAsync();
+            return (await _uow.ProcessingStepRepository.AllAsync(User.GetUserId())).ToList();;
         }
 
         // GET: api/ProcessingStep/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProcessingStep>> GetProcessingStep(Guid id)
+        public async Task<ActionResult<ProcessingStepDto>> GetProcessingStep(Guid id)
         {
-            var processingStep = await _context.ProcessingSteps.FindAsync(id);
+            var processingStep = await _uow.ProcessingStepRepository.FindAsync(id);
 
             if (processingStep == null)
             {
@@ -45,41 +43,27 @@ namespace WebApp.ApiControllers
         // PUT: api/ProcessingStep/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProcessingStep(Guid id, ProcessingStep processingStep)
+        public async Task<IActionResult> PutProcessingStep(Guid id, ProcessingStepDto processingStep)
         {
             if (id != processingStep.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(processingStep).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProcessingStepExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+            _uow.ProcessingStepRepository.Update(processingStep);
+            
+            await _uow.SaveChangesAsync();
+            
             return NoContent();
         }
 
         // POST: api/ProcessingStep
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ProcessingStep>> PostProcessingStep(ProcessingStep processingStep)
+        public async Task<ActionResult<ProcessingStepDto>> PostProcessingStep(ProcessingStepDto processingStep)
         {
-            _context.ProcessingSteps.Add(processingStep);
-            await _context.SaveChangesAsync();
+            _uow.ProcessingStepRepository.Add(processingStep);
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetProcessingStep", new { id = processingStep.Id }, processingStep);
         }
@@ -88,21 +72,16 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProcessingStep(Guid id)
         {
-            var processingStep = await _context.ProcessingSteps.FindAsync(id);
+            var processingStep = await _uow.ProcessingStepRepository.FindAsync(id);
             if (processingStep == null)
             {
                 return NotFound();
             }
 
-            _context.ProcessingSteps.Remove(processingStep);
-            await _context.SaveChangesAsync();
+            _uow.ProcessingStepRepository.Remove(processingStep);
+            await _uow.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool ProcessingStepExists(Guid id)
-        {
-            return _context.ProcessingSteps.Any(e => e.Id == id);
         }
     }
 }

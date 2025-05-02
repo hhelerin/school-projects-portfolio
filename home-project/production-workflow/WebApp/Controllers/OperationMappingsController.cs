@@ -2,7 +2,7 @@ using App.DAL.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using App.Domain;
+using App.DAL.DTO;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using WebApp.ViewModels;
@@ -51,7 +51,7 @@ namespace WebApp.Controllers
         {
             var vm = new OperationMappingCreateEditViewModel
             {
-                OperationMapping = new OperationMapping(),
+                OperationMapping = new OperationMappingDto(),
                 OrderSelectList = new SelectList(await _uow.OrderRepository.AllAsync(), "Id", "Name"),
                 ProcessingStepSelectList = new SelectList(await _uow.ProcessingStepRepository.AllAsync(), "Id", "Name")
             };

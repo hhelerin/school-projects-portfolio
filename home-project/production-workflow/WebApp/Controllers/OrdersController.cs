@@ -2,8 +2,7 @@ using App.DAL.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
-using App.Domain;
+using App.DAL.DTO;
 using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.Controllers
@@ -52,7 +51,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Create(
             [Bind(
                 "CustomerId,MaterialId,OrderNumber,Name,OrderDate,Deadline,TotalAmount,TotalArea,LinearMeter,Details,Status,ShipmentID,PalletNumber,BillingDate,Id")]
-            Order order)
+            OrderDto order)
         {
             if (ModelState.IsValid)
             {
@@ -94,7 +93,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Edit(Guid id,
             [Bind(
                 "CustomerId,MaterialId,OrderNumber,Name,OrderDate,Deadline,TotalAmount,TotalArea,LinearMeter,Details,Status,ShipmentID,PalletNumber,BillingDate,Id")]
-            Order order)
+            OrderDto order)
         {
             if (id != order.Id) return NotFound();
 

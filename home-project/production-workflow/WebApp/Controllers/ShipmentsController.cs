@@ -2,7 +2,7 @@ using App.DAL.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using App.Domain;
+using App.DAL.DTO;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
 
@@ -53,7 +53,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ShippedOn,Method,Details,CustomerId,Id")] Shipment shipment)
+        public async Task<IActionResult> Create([Bind("ShippedOn,Method,Details,CustomerId,Id")] ShipmentDto shipment)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ShippedOn,Method,Details,CustomerId,Id")] Shipment shipment)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ShippedOn,Method,Details,CustomerId,Id")] ShipmentDto shipment)
         {
             if (id != shipment.Id)
             {

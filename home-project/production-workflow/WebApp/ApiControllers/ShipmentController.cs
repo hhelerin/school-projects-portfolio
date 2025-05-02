@@ -1,38 +1,36 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using App.DAL.Contracts;
+using App.DAL.DTO;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
-using App.Domain;
+using Asp.Versioning;
+using Base.Helpers;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
+    /// <inheritdoc />
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class ShipmentController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUOW _uow;
 
-        public ShipmentController(AppDbContext context)
+        public ShipmentController(IAppUOW uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: api/Shipment
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Shipment>>> GetShipments()
+        public async Task<ActionResult<IEnumerable<ShipmentDto>>> GetShipments()
         {
-            return await _context.Shipments.ToListAsync();
+            return (await _uow.ShipmentRepository.AllAsync(User.GetUserId())).ToList();;
         }
 
         // GET: api/Shipment/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Shipment>> GetShipment(Guid id)
+        public async Task<ActionResult<ShipmentDto>> GetShipment(Guid id)
         {
-            var shipment = await _context.Shipments.FindAsync(id);
+            var shipment = await _uow.ShipmentRepository.FindAsync(id);
 
             if (shipment == null)
             {
@@ -45,30 +43,16 @@ namespace WebApp.ApiControllers
         // PUT: api/Shipment/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutShipment(Guid id, Shipment shipment)
+        public async Task<IActionResult> PutShipment(Guid id, ShipmentDto shipment)
         {
             if (id != shipment.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(shipment).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ShipmentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _uow.ShipmentRepository.Update(shipment);
+            
+            await _uow.SaveChangesAsync();
 
             return NoContent();
         }
@@ -76,10 +60,10 @@ namespace WebApp.ApiControllers
         // POST: api/Shipment
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Shipment>> PostShipment(Shipment shipment)
+        public async Task<ActionResult<ShipmentDto>> PostShipment(ShipmentDto shipment)
         {
-            _context.Shipments.Add(shipment);
-            await _context.SaveChangesAsync();
+            _uow.ShipmentRepository.Add(shipment);
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetShipment", new { id = shipment.Id }, shipment);
         }
@@ -88,21 +72,16 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteShipment(Guid id)
         {
-            var shipment = await _context.Shipments.FindAsync(id);
+            var shipment = await _uow.ShipmentRepository.FindAsync(id);
             if (shipment == null)
             {
                 return NotFound();
             }
 
-            _context.Shipments.Remove(shipment);
-            await _context.SaveChangesAsync();
+            _uow.ShipmentRepository.Remove(shipment);
+            await _uow.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool ShipmentExists(Guid id)
-        {
-            return _context.Shipments.Any(e => e.Id == id);
         }
     }
 }

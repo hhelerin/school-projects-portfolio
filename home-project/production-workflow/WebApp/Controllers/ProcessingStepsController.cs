@@ -1,7 +1,7 @@
 using App.DAL.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using App.Domain;
+using App.DAL.DTO;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
 
@@ -52,7 +52,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Details,Id")] ProcessingStep processingStep)
+        public async Task<IActionResult> Create([Bind("Name,Details,Id")] ProcessingStepDto processingStep)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +85,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Details,Id")] ProcessingStep processingStep)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Details,Id")] ProcessingStepDto processingStep)
         {
             if (id != processingStep.Id)
             {

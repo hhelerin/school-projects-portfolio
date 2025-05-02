@@ -1,38 +1,36 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using App.DAL.Contracts;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
-using App.Domain;
+using App.DAL.DTO;
+using Asp.Versioning;
+using Base.Helpers;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
+    /// <inheritdoc />
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class MaterialController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUOW _uow;
 
-        public MaterialController(AppDbContext context)
+        public MaterialController(IAppUOW uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: api/Material
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Material>>> GetMaterials()
+        public async Task<ActionResult<IEnumerable<MaterialDto>>> GetMaterials()
         {
-            return await _context.Materials.ToListAsync();
+            return (await _uow.MaterialRepository.AllAsync(User.GetUserId())).ToList();
         }
 
         // GET: api/Material/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Material>> GetMaterial(Guid id)
+        public async Task<ActionResult<MaterialDto>> GetMaterial(Guid id)
         {
-            var material = await _context.Materials.FindAsync(id);
+            var material = await _uow.MaterialRepository.FindAsync(id);
 
             if (material == null)
             {
@@ -45,30 +43,16 @@ namespace WebApp.ApiControllers
         // PUT: api/Material/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMaterial(Guid id, Material material)
+        public async Task<IActionResult> PutMaterial(Guid id, MaterialDto material)
         {
             if (id != material.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(material).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MaterialExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _uow.MaterialRepository.Update(material);
+            
+            await _uow.SaveChangesAsync();
 
             return NoContent();
         }
@@ -76,10 +60,10 @@ namespace WebApp.ApiControllers
         // POST: api/Material
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Material>> PostMaterial(Material material)
+        public async Task<ActionResult<MaterialDto>> PostMaterial(MaterialDto material)
         {
-            _context.Materials.Add(material);
-            await _context.SaveChangesAsync();
+            _uow.MaterialRepository.Add(material);
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetMaterial", new { id = material.Id }, material);
         }
@@ -88,21 +72,16 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMaterial(Guid id)
         {
-            var material = await _context.Materials.FindAsync(id);
+            var material = await _uow.MaterialRepository.FindAsync(id);
             if (material == null)
             {
                 return NotFound();
             }
 
-            _context.Materials.Remove(material);
-            await _context.SaveChangesAsync();
+            _uow.MaterialRepository.Remove(material);
+            await _uow.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool MaterialExists(Guid id)
-        {
-            return _context.Materials.Any(e => e.Id == id);
         }
     }
 }

@@ -1,38 +1,37 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using App.DAL.Contracts;
+using App.DAL.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Asp.Versioning;
+using Base.Helpers;
 using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
-using App.Domain;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
+    /// <inheritdoc />
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUOW _uow;
 
-        public OrderController(AppDbContext context)
+        public OrderController(IAppUOW uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: api/Order
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
+        public async Task<ActionResult<IEnumerable<OrderDto>>> GetOrders()
         {
-            return await _context.Orders.ToListAsync();
+            return (await _uow.OrderRepository.AllAsync(User.GetUserId())).ToList();
         }
 
         // GET: api/Order/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> GetOrder(Guid id)
+        public async Task<ActionResult<OrderDto>> GetOrder(Guid id)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _uow.OrderRepository.FindAsync(id);
 
             if (order == null)
             {
@@ -45,41 +44,27 @@ namespace WebApp.ApiControllers
         // PUT: api/Order/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrder(Guid id, Order order)
+        public async Task<IActionResult> PutOrder(Guid id, OrderDto order)
         {
             if (id != order.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(order).State = EntityState.Modified;
+            _uow.OrderRepository.Update(order);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OrderExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+            await _uow.SaveChangesAsync();
+            
             return NoContent();
         }
 
         // POST: api/Order
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Order>> PostOrder(Order order)
+        public async Task<ActionResult<OrderDto>> PostOrder(OrderDto order)
         {
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
+            _uow.OrderRepository.Add(order);
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetOrder", new { id = order.Id }, order);
         }
@@ -88,21 +73,16 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(Guid id)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _uow.OrderRepository.FindAsync(id);
             if (order == null)
             {
                 return NotFound();
             }
 
-            _context.Orders.Remove(order);
-            await _context.SaveChangesAsync();
+            _uow.OrderRepository.Remove(order);
+            await _uow.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool OrderExists(Guid id)
-        {
-            return _context.Orders.Any(e => e.Id == id);
         }
     }
 }

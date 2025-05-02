@@ -1,36 +1,39 @@
+using App.DAL.Contracts;
+using App.DAL.DTO;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
-using App.Domain;
+using Asp.Versioning;
+using Base.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
+    /// <inheritdoc />
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CustomersUsersController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUOW _uow;
 
-        public CustomersUsersController(AppDbContext context)
+        public CustomersUsersController(IAppUOW uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: api/CustomersUsers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CustomersUsers>>> GetCustomersUsers()
+        public async Task<ActionResult<IEnumerable<CustomersUsersDto>>> GetCustomersUsers()
         {
-            return await _context.CustomersUsers.ToListAsync();
+            return (await _uow.CustomersUsersRepository.AllAsync(User.GetUserId())).ToList();
         }
 
         // GET: api/CustomersUsers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CustomersUsers>> GetCustomersUsers(Guid id)
+        public async Task<ActionResult<CustomersUsersDto>> GetCustomersUsers(Guid id)
         {
-            var customersUsers = await _context.CustomersUsers.FindAsync(id);
+            var customersUsers = await _uow.CustomersUsersRepository.FindAsync(id);
 
             if (customersUsers == null)
             {
@@ -43,41 +46,27 @@ namespace WebApp.ApiControllers
         // PUT: api/CustomersUsers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomersUsers(Guid id, CustomersUsers customersUsers)
+        public async Task<IActionResult> PutCustomersUsers(Guid id, CustomersUsersDto customersUsers)
         {
             if (id != customersUsers.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(customersUsers).State = EntityState.Modified;
+            _uow.CustomersUsersRepository.Update(customersUsers);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CustomersUsersExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+            await _uow.SaveChangesAsync();
+            
             return NoContent();
         }
 
         // POST: api/CustomersUsers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CustomersUsers>> PostCustomersUsers(CustomersUsers customersUsers)
+        public async Task<ActionResult<CustomersUsersDto>> PostCustomersUsers(CustomersUsersDto customersUsers)
         {
-            _context.CustomersUsers.Add(customersUsers);
-            await _context.SaveChangesAsync();
+            _uow.CustomersUsersRepository.Add(customersUsers);
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetCustomersUsers", new { id = customersUsers.Id }, customersUsers);
         }
@@ -86,21 +75,16 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomersUsers(Guid id)
         {
-            var customersUsers = await _context.CustomersUsers.FindAsync(id);
+            var customersUsers = await _uow.CustomersUsersRepository.FindAsync(id);
             if (customersUsers == null)
             {
                 return NotFound();
             }
 
-            _context.CustomersUsers.Remove(customersUsers);
-            await _context.SaveChangesAsync();
+            _uow.CustomersUsersRepository.Remove(customersUsers);
+            await _uow.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool CustomersUsersExists(Guid id)
-        {
-            return _context.CustomersUsers.Any(e => e.Id == id);
         }
     }
 }

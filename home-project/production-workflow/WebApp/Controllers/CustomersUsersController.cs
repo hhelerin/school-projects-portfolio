@@ -1,8 +1,8 @@
 using App.DAL.Contracts;
+using App.DAL.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using App.Domain;
 using App.Domain.Identity;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
@@ -78,8 +78,8 @@ namespace WebApp.Controllers
 
             vm.CustomerSelectList = new SelectList(
                 await _uow.CustomerRepository.AllAsync(),
-                nameof(Customer.Id),
-                nameof(Customer.Address),
+                nameof(CustomerDto.Id),
+                nameof(CustomerDto.Address),
                 vm.CustomersUsers.CustomerId
             );
 
@@ -116,7 +116,8 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("CustomerId,Id,UserId")] CustomersUsers customersUsers)
+        public async Task<IActionResult> Edit(Guid id, [Bind("CustomerId,Id,UserId")] CustomersUsersDto 
+            customersUsers)
         {
             if (id != customersUsers.Id)
             {

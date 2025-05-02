@@ -2,7 +2,7 @@ using App.DAL.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using App.Domain;
+using App.DAL.DTO;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
 
@@ -55,7 +55,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OrderId,DetailNumber,LengthMm,WidthMm,HeightMm,Area,LinearMeter,Amount,Details,Id")] OrderItem orderItem)
+        public async Task<IActionResult> Create([Bind("OrderId,DetailNumber,LengthMm,WidthMm,HeightMm,Area,LinearMeter,Amount,Details,Id")] OrderItemDto orderItem)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +90,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("OrderId,DetailNumber,LengthMm,WidthMm,HeightMm,Area,LinearMeter,Amount,Details,Id")] OrderItem orderItem)
+        public async Task<IActionResult> Edit(Guid id, [Bind("OrderId,DetailNumber,LengthMm,WidthMm,HeightMm,Area,LinearMeter,Amount,Details,Id")] OrderItemDto orderItem)
         {
             if (id != orderItem.Id)
             {

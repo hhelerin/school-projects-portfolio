@@ -1,38 +1,36 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using App.DAL.Contracts;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
-using App.Domain;
+using App.DAL.DTO;
+using Asp.Versioning;
+using Base.Helpers;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
+    /// <inheritdoc />
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class OperationMappingController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUOW _uow;
 
-        public OperationMappingController(AppDbContext context)
+        public OperationMappingController(IAppUOW uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: api/OperationMapping
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OperationMapping>>> GetOperationMappings()
+        public async Task<ActionResult<IEnumerable<OperationMappingDto>>> GetOperationMappings()
         {
-            return await _context.OperationMappings.ToListAsync();
+            return (await _uow.OperationMappingRepository.AllAsync(User.GetUserId())).ToList();;
         }
 
         // GET: api/OperationMapping/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<OperationMapping>> GetOperationMapping(Guid id)
+        public async Task<ActionResult<OperationMappingDto>> GetOperationMapping(Guid id)
         {
-            var operationMapping = await _context.OperationMappings.FindAsync(id);
+            var operationMapping = await _uow.OperationMappingRepository.FindAsync(id);
 
             if (operationMapping == null)
             {
@@ -45,30 +43,16 @@ namespace WebApp.ApiControllers
         // PUT: api/OperationMapping/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOperationMapping(Guid id, OperationMapping operationMapping)
+        public async Task<IActionResult> PutOperationMapping(Guid id, OperationMappingDto operationMapping)
         {
             if (id != operationMapping.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(operationMapping).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OperationMappingExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _uow.OperationMappingRepository.Update(operationMapping);
+            
+            await _uow.SaveChangesAsync();
 
             return NoContent();
         }
@@ -76,10 +60,10 @@ namespace WebApp.ApiControllers
         // POST: api/OperationMapping
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<OperationMapping>> PostOperationMapping(OperationMapping operationMapping)
+        public async Task<ActionResult<OperationMappingDto>> PostOperationMapping(OperationMappingDto operationMapping)
         {
-            _context.OperationMappings.Add(operationMapping);
-            await _context.SaveChangesAsync();
+            _uow.OperationMappingRepository.Add(operationMapping);
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetOperationMapping", new { id = operationMapping.Id }, operationMapping);
         }
@@ -88,21 +72,16 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOperationMapping(Guid id)
         {
-            var operationMapping = await _context.OperationMappings.FindAsync(id);
+            var operationMapping = await _uow.OperationMappingRepository.FindAsync(id);
             if (operationMapping == null)
             {
                 return NotFound();
             }
 
-            _context.OperationMappings.Remove(operationMapping);
-            await _context.SaveChangesAsync();
+            _uow.OperationMappingRepository.Remove(operationMapping);
+            await _uow.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool OperationMappingExists(Guid id)
-        {
-            return _context.OperationMappings.Any(e => e.Id == id);
         }
     }
 }

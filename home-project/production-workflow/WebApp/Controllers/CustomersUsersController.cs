@@ -87,7 +87,7 @@ namespace WebApp.Controllers
                 _userManager.Users.ToList(),
                 "Id",
                 "Id",
-                vm.CustomersUsers.UserId
+                vm.CustomersUsers.CustomerId
             );
 
             return View(vm);
@@ -107,7 +107,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
             ViewData["CustomerId"] = new SelectList(await _uow.CustomerRepository.AllAsync(), "Id", "Address", customersUsers.CustomerId);
-            ViewData["UserId"] = new SelectList(_userManager.Users.ToList(), "Id", "Id", customersUsers.UserId);
+            ViewData["UserId"] = new SelectList(_userManager.Users.ToList(), "Id", "Id", customersUsers.CustomerId);
             return View(customersUsers);
         }
 
@@ -145,7 +145,7 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CustomerId"] = new SelectList(await _uow.CustomerRepository.AllAsync(), "Id", "Address", customersUsers.CustomerId);
-            ViewData["UserId"] = new SelectList(_userManager.Users.ToList(), "Id", "Id", customersUsers.UserId);
+            ViewData["UserId"] = new SelectList(_userManager.Users.ToList(), "Id", "Id", customersUsers.CustomerId);
             return View(customersUsers);
         }
 

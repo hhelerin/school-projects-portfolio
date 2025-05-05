@@ -133,13 +133,13 @@ public class BaseRepository<TDalEntity, TDomainEntity, TKey> : IBaseRepository<T
         }
     }
 
-    public virtual bool Exists(Guid id, TKey? userId = default)
+    public virtual bool Exists(TKey id, TKey? userId = default)
     {
         var query = GetQuery(userId);
         return query.Any(e => e.Id.Equals(id));
     }
 
-    public virtual async Task<bool> ExistsAsync(Guid id, TKey? userId = default)
+    public virtual async Task<bool> ExistsAsync(TKey id, TKey? userId = default)
     {
         var query = GetQuery(userId);
         return await query.AnyAsync(e => e.Id.Equals(id));

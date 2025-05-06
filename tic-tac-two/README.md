@@ -1,5 +1,5 @@
 
-##Game of Tic-Tac-Two  
+## Game of Tic-Tac-Two  
 
 This project is completed within a TalTech course: Programming in C# language.  
 Web app and console app, saving to database or to a file.  

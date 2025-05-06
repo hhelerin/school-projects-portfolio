@@ -1,0 +1,15 @@
+/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/bin/Debug/net9.0/Base.Domain.deps.json
+/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/bin/Debug/net9.0/Base.Domain.dll
+/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/bin/Debug/net9.0/Base.Domain.pdb
+/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/bin/Debug/net9.0/Base.Contracts.dll
+/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/bin/Debug/net9.0/Base.Contracts.pdb
+/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/obj/Debug/net9.0/Base.Domain.csproj.AssemblyReference.cache
+/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/obj/Debug/net9.0/Base.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/obj/Debug/net9.0/Base.Domain.AssemblyInfoInputs.cache
+/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/obj/Debug/net9.0/Base.Domain.AssemblyInfo.cs
+/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/obj/Debug/net9.0/Base.Domain.csproj.CoreCompileInputs.cache
+/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/obj/Debug/net9.0/Base.Dom.FA02210C.Up2Date
+/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/obj/Debug/net9.0/Base.Domain.dll
+/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/obj/Debug/net9.0/refint/Base.Domain.dll
+/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/obj/Debug/net9.0/Base.Domain.pdb
+/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/obj/Debug/net9.0/ref/Base.Domain.dll

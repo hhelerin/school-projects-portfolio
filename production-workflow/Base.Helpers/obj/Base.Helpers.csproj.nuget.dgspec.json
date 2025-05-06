@@ -1,0 +1,775 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Helpers/Base.Helpers.csproj": {}
+  },
+  "projects": {
+    "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.Contracts/App.DAL.Contracts.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.Contracts/App.DAL.Contracts.csproj",
+        "projectName": "App.DAL.Contracts",
+        "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.Contracts/App.DAL.Contracts.csproj",
+        "packagesPath": "/Users/helerin/.nuget/packages/",
+        "outputPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.Contracts/obj/",
+        "projectStyle": "PackageReference",
+        "UsingMicrosoftNETSdk": false,
+        "configFilePaths": [
+          "/Users/helerin/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.DTO/App.DAL.DTO.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.DTO/App.DAL.DTO.csproj"
+              },
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.Domain/App.Domain.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.Domain/App.Domain.csproj"
+              },
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.DAL.Contracts/Base.DAL.Contracts.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.DAL.Contracts/Base.DAL.Contracts.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        }
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.DTO/App.DAL.DTO.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.DTO/App.DAL.DTO.csproj",
+        "projectName": "App.DAL.DTO",
+        "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.DTO/App.DAL.DTO.csproj",
+        "packagesPath": "/Users/helerin/.nuget/packages/",
+        "outputPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.DTO/obj/",
+        "projectStyle": "PackageReference",
+        "UsingMicrosoftNETSdk": false,
+        "configFilePaths": [
+          "/Users/helerin/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.Domain/App.Domain.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.Domain/App.Domain.csproj"
+              },
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Contracts/Base.Contracts.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Contracts/Base.Contracts.csproj"
+              },
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/Base.Domain.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/Base.Domain.csproj"
+              },
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Resources/Base.Resources.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Resources/Base.Resources.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        }
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.EF/App.DAL.EF.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.EF/App.DAL.EF.csproj",
+        "projectName": "App.DAL.EF",
+        "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.EF/App.DAL.EF.csproj",
+        "packagesPath": "/Users/helerin/.nuget/packages/",
+        "outputPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.EF/obj/",
+        "projectStyle": "PackageReference",
+        "UsingMicrosoftNETSdk": false,
+        "configFilePaths": [
+          "/Users/helerin/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.Contracts/App.DAL.Contracts.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.Contracts/App.DAL.Contracts.csproj"
+              },
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.DTO/App.DAL.DTO.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.DTO/App.DAL.DTO.csproj"
+              },
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.Domain/App.Domain.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.Domain/App.Domain.csproj"
+              },
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.DAL.EF/Base.DAL.EF.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.DAL.EF/Base.DAL.EF.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        }
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.CodeAnalysis.Workspaces.Common": {
+              "target": "Package",
+              "version": "[4.8.0, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[9.0.4, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.Domain/App.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.Domain/App.Domain.csproj",
+        "projectName": "App.Domain",
+        "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.Domain/App.Domain.csproj",
+        "packagesPath": "/Users/helerin/.nuget/packages/",
+        "outputPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.Domain/obj/",
+        "projectStyle": "PackageReference",
+        "UsingMicrosoftNETSdk": false,
+        "configFilePaths": [
+          "/Users/helerin/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.Resources/App.Resources.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.Resources/App.Resources.csproj"
+              },
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/Base.Domain.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/Base.Domain.csproj"
+              },
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Resources/Base.Resources.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Resources/Base.Resources.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        }
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Identity": {
+              "target": "Package",
+              "version": "[2.3.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.Resources/App.Resources.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.Resources/App.Resources.csproj",
+        "projectName": "App.Resources",
+        "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.Resources/App.Resources.csproj",
+        "packagesPath": "/Users/helerin/.nuget/packages/",
+        "outputPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.Resources/obj/",
+        "projectStyle": "PackageReference",
+        "UsingMicrosoftNETSdk": false,
+        "configFilePaths": [
+          "/Users/helerin/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        }
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Contracts/Base.Contracts.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Contracts/Base.Contracts.csproj",
+        "projectName": "Base.Contracts",
+        "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Contracts/Base.Contracts.csproj",
+        "packagesPath": "/Users/helerin/.nuget/packages/",
+        "outputPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Contracts/obj/",
+        "projectStyle": "PackageReference",
+        "UsingMicrosoftNETSdk": false,
+        "configFilePaths": [
+          "/Users/helerin/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        }
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.DAL.Contracts/Base.DAL.Contracts.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.DAL.Contracts/Base.DAL.Contracts.csproj",
+        "projectName": "Base.DAL.Contracts",
+        "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.DAL.Contracts/Base.DAL.Contracts.csproj",
+        "packagesPath": "/Users/helerin/.nuget/packages/",
+        "outputPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.DAL.Contracts/obj/",
+        "projectStyle": "PackageReference",
+        "UsingMicrosoftNETSdk": false,
+        "configFilePaths": [
+          "/Users/helerin/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Contracts/Base.Contracts.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Contracts/Base.Contracts.csproj"
+              },
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/Base.Domain.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/Base.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        }
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.DAL.EF/Base.DAL.EF.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.DAL.EF/Base.DAL.EF.csproj",
+        "projectName": "Base.DAL.EF",
+        "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.DAL.EF/Base.DAL.EF.csproj",
+        "packagesPath": "/Users/helerin/.nuget/packages/",
+        "outputPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.DAL.EF/obj/",
+        "projectStyle": "PackageReference",
+        "UsingMicrosoftNETSdk": false,
+        "configFilePaths": [
+          "/Users/helerin/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Contracts/Base.Contracts.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Contracts/Base.Contracts.csproj"
+              },
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.DAL.Contracts/Base.DAL.Contracts.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.DAL.Contracts/Base.DAL.Contracts.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        }
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/Base.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/Base.Domain.csproj",
+        "projectName": "Base.Domain",
+        "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/Base.Domain.csproj",
+        "packagesPath": "/Users/helerin/.nuget/packages/",
+        "outputPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Domain/obj/",
+        "projectStyle": "PackageReference",
+        "UsingMicrosoftNETSdk": false,
+        "configFilePaths": [
+          "/Users/helerin/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Contracts/Base.Contracts.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Contracts/Base.Contracts.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        }
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Identity": {
+              "target": "Package",
+              "version": "[2.3.1, )"
+            },
+            "Microsoft.Extensions.Identity.Stores": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Helpers/Base.Helpers.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Helpers/Base.Helpers.csproj",
+        "projectName": "Base.Helpers",
+        "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Helpers/Base.Helpers.csproj",
+        "packagesPath": "/Users/helerin/.nuget/packages/",
+        "outputPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Helpers/obj/",
+        "projectStyle": "PackageReference",
+        "UsingMicrosoftNETSdk": false,
+        "configFilePaths": [
+          "/Users/helerin/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.EF/App.DAL.EF.csproj": {
+                "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/App.DAL.EF/App.DAL.EF.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        }
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[9.0.3, )"
+            },
+            "Microsoft.IdentityModel.JsonWebTokens": {
+              "target": "Package",
+              "version": "[8.8.0, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Resources/Base.Resources.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Resources/Base.Resources.csproj",
+        "projectName": "Base.Resources",
+        "projectPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Resources/Base.Resources.csproj",
+        "packagesPath": "/Users/helerin/.nuget/packages/",
+        "outputPath": "/Users/helerin/RiderProjects/icd0024-24-25-s/home-project/production-workflow/Base.Resources/obj/",
+        "projectStyle": "PackageReference",
+        "UsingMicrosoftNETSdk": false,
+        "configFilePaths": [
+          "/Users/helerin/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        }
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

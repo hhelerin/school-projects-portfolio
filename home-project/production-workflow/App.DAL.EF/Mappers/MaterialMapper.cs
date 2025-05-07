@@ -8,11 +8,25 @@ public class MaterialMapper : IMapper<App.DAL.DTO.MaterialDto, App.Domain.Materi
 {
     public MaterialDto? Map(Material? entity)
     {
-        throw new NotImplementedException();
+        if (entity == null) return null;
+        var res = new MaterialDto()
+        {
+            Id = entity.Id,
+            Name = entity.Name,
+            Details = entity.Details
+        };
+        return res;
     }
 
     public Material? Map(MaterialDto? entity)
     {
-        throw new NotImplementedException();
+        if (entity == null) return null;
+        var res = new Material()
+        {
+            Id = entity.Id,
+            Name = entity.Name,
+            Details = entity.Details
+        };
+        return res;
     }
 }

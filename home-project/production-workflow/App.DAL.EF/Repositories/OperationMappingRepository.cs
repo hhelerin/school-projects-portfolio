@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace App.DAL.EF.Repositories;
 
 public class OperationMappingRepository(DbContext repositoryDbContext)
-    : BaseRepository<OperationMappingDto, OperationMapping>(repositoryDbContext, new OperationMappingMapper()), IOperationMappingRepository
+    : BaseRepository<OperationMappingDto, OperationMapping>(repositoryDbContext, new OperationMappingMapper(new OrderMapper(), new ProcessingStepMapper())), IOperationMappingRepository
 {
     public override async Task<IEnumerable<OperationMappingDto>> AllAsync(Guid userId = default)
     {

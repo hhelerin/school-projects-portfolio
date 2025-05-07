@@ -8,11 +8,26 @@ public class ProcessingStepMapper : IMapper<App.DAL.DTO.ProcessingStepDto, App.D
 {
     public ProcessingStepDto? Map(ProcessingStep? entity)
     {
-        throw new NotImplementedException();
+        if (entity == null) return null;
+        var res = new ProcessingStepDto()
+        {
+            Id = entity.Id,
+            Name = entity.Name,
+            Details = entity.Details
+        };
+        return res;
     }
 
     public ProcessingStep? Map(ProcessingStepDto? entity)
     {
-        throw new NotImplementedException();
+        if (entity == null) return null;
+        
+        var res = new ProcessingStep()
+        {
+            Id = entity.Id,
+            Name = entity.Name,
+            Details = entity.Details
+        };
+        return res;
     }
 }

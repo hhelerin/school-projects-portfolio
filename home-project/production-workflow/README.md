@@ -8,3 +8,10 @@ Author: Helerin Heinsalu
 Uni-ID: helehe  
 Student code: 206451 IADB  
 Contact: helehe@taltech.ee  
+  
+    
+      
+See the project_proposal.pdf for details about the project.
+
+
+

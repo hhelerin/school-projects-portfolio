@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using App.Domain.Enums;
 using Contracts;
 
 namespace App.DAL.DTO;
@@ -36,8 +38,10 @@ public class OrderDto: IDomainId
     [MaxLength(128, ErrorMessageResourceType = typeof(Base.Resources.Common), ErrorMessageResourceName = "MaxLength")]
     [Display(Name = nameof(Details), Prompt = nameof(Details), ResourceType = typeof(Base.Resources.Common))]
     public string? Details { get; set; }
+    
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     [Display(Name = nameof(Status), Prompt = nameof(Status), ResourceType = typeof(App.Resources.Domain.Order))]
-    public EStatus Status { get; set; } = EStatus.Pending;
+    public OrderStatus Status { get; set; } = OrderStatus.Pending;
     
     [Display(Name = nameof(Shipment), Prompt = nameof(Shipment), ResourceType = typeof(App.Resources.Domain.Order))]
     public Guid? ShipmentID { get; set; }
@@ -50,13 +54,5 @@ public class OrderDto: IDomainId
     
     [Display(Name = nameof(BillingDate), Prompt = nameof(BillingDate), ResourceType = typeof(App.Resources.Domain.Order))]
     public DateOnly? BillingDate { get; set; }
-
-    public enum EStatus
-    {
-        Pending = 1,
-        InProgress = 2, 
-        Completed = 3, 
-        Shipped = 4,
-        Cancelled = 5
-    }
+    
 }

@@ -1,0 +1,39 @@
+@{
+    ViewData["Title"] = "Staff Management";
+    var slug = ViewData["CompanySlug"] as string ?? "";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/@slug/dashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Staff</li>
+                </ol>
+            </nav>
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Staff Management</h1>
+                <a href="/@slug/staff/invite" class="btn btn-primary">
+                    <i class="bi bi-person-plus"></i> Invite Staff
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <p class="text-muted">Staff list will be implemented in a future update.</p>
+                    <p>Use the "Invite Staff" button to add new members to your school.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

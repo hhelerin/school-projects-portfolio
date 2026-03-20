@@ -1,0 +1,165 @@
+﻿@using System.Threading
+@using WebApp.Helpers
+@using App.DAL.EF
+@using App.Domain.Identity
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@inject AppNameService AppNameService
+@inject AppDbContext DbContext
+@inject UserManager<AppUser> UserManager
+@inject SignInManager<AppUser> SignInManager
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - DanceSchool</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true"/>
+    @await RenderSectionAsync("HeaderScripts", required: false)
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@AppNameService.AppName</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@App.Resources.Views.Shared._Layout.Home</a>
+                    </li>
+                    @if (!SignInManager.IsSignedIn(User))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-primary fw-bold" asp-controller="SignUp" asp-action="Register">
+                                <i class="bi bi-building-add"></i> Register Your School
+                            </a>
+                        </li>
+                    }
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        var user = await UserManager.GetUserAsync(User);
+                        if (user != null)
+                        {
+                            var userCompanies = await DbContext.CompanyUsers
+                                .Where(cu => cu.AppUserId == user.Id && cu.IsActive)
+                                .Select(cu => cu.Company)
+                                .ToListAsync();
+                            
+                            if (userCompanies.Count == 1)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="/@userCompanies[0]!.Slug/dashboard">
+                                        <i class="bi bi-speedometer2"></i> Dashboard
+                                    </a>
+                                </li>
+                            }
+                            else if (userCompanies.Count > 1)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-speedometer2"></i> Dashboards
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        @foreach (var company in userCompanies)
+                                        {
+                                            <li><a class="dropdown-item" href="/@company!.Slug/dashboard">@company.Name</a></li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                        }
+                    }
+                    @if (User.IsInRole("SystemAdmin"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-shield-lock"></i> Admin
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-area="Root" asp-controller="Users" asp-action="Index">Users</a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        var user = await UserManager.GetUserAsync(User);
+                        if (user != null)
+                        {
+                            var companyUser = await DbContext.CompanyUsers
+                                .FirstOrDefaultAsync(cu => cu.AppUserId == user.Id && cu.IsActive);
+                            if (companyUser != null)
+                            {
+                                // Check if user has CompanyOwner, CompanyAdmin, or CompanyManager role
+                                var hasConfigRole = await DbContext.CompanyUserRoles
+                                    .Where(cur => cur.CompanyUserId == companyUser.Id && cur.IsActive)
+                                    .Select(cur => cur.CompanyRole!.Name)
+                                    .AnyAsync(roleName => roleName == "CompanyOwner" || roleName == "CompanyAdmin" || roleName == "CompanyManager");
+                                
+                                if (hasConfigRole)
+                                {
+                                    var company = await DbContext.Companies.FirstOrDefaultAsync(c => c.Id == companyUser.CompanyId);
+                                    if (company != null)
+                                    {
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="bi bi-gear"></i> Configuration
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="/@company.Slug/dance-styles">Dance Styles</a></li>
+                                                <li><a class="dropdown-item" href="/@company.Slug/levels">Levels</a></li>
+                                                <li><a class="dropdown-item" href="/@company.Slug/studios">Studios</a></li>
+                                                <li><a class="dropdown-item" href="/@company.Slug/instructors">Instructors</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="bi bi-calendar"></i> Operations
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="/@company.Slug/classes">Classes</a></li>
+                                                <li><a class="dropdown-item" href="/@company.Slug/schedule">Schedule</a></li>
+                                                <li><a class="dropdown-item" href="/@company.Slug/students">Students</a></li>
+                                            </ul>
+                                        </li>
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    <partial name="_LanguageSelection"/>
+                </ul>
+                <partial name="_LoginPartial"/>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="border-top footer text-muted">
+    <div class="container">
+        @AppNameService.AppName - <a asp-area="" asp-controller="Home" asp-action="Privacy">@App.Resources.Views.Shared._Layout.Privacy</a> | 
+        <a href="/swagger/index.html">Api</a> | 
+        @Thread.CurrentThread.CurrentCulture.Name
+    </div>
+</footer>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/htmx.org/dist/htmx.min.js"></script>
+<script src="~/lib/alpinejs/dist/cdn.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

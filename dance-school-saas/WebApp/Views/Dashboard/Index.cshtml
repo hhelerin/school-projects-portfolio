@@ -1,0 +1,97 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    var companyName = ViewData["CompanyName"] as string ?? "Your School";
+    var companySlug = ViewData["CompanySlug"] as string ?? "";
+    var userFirstName = ViewData["UserFirstName"] as string ?? "there";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="jumbotron bg-light p-5 rounded">
+                <h1 class="display-4">Welcome, @userFirstName!</h1>
+                <p class="lead">Your school <strong>@companyName</strong> is set up.</p>
+                <hr class="my-4">
+                <p>This is your school dashboard. Use the navigation below to manage your dance school.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Students</h5>
+                    <p class="card-text text-muted">Manage student records and registrations.</p>
+                    <a href="/@companySlug/students" class="btn btn-primary btn-sm">Manage Students</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Classes</h5>
+                    <p class="card-text text-muted">Schedule and manage dance classes.</p>
+                    <a href="/@companySlug/classes" class="btn btn-primary btn-sm">Manage Classes</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Instructors</h5>
+                    <p class="card-text text-muted">Manage your teaching staff.</p>
+                    <a href="/@companySlug/instructors" class="btn btn-primary btn-sm">Manage Instructors</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Staff</h5>
+                    <p class="card-text text-muted">Invite and manage school staff.</p>
+                    <a href="/@companySlug/staff" class="btn btn-primary btn-sm">Manage Staff</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Schedules</h5>
+                    <p class="card-text text-muted">View and manage class schedules.</p>
+                    <a href="/@companySlug/schedule" class="btn btn-primary btn-sm">Manage Schedules</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Studios</h5>
+                    <p class="card-text text-muted">Manage studio locations and rooms.</p>
+                    <a href="/@companySlug/studios" class="btn btn-primary btn-sm">Manage Studios</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Dance Styles</h5>
+                    <p class="card-text text-muted">Manage dance styles offered.</p>
+                    <a href="/@companySlug/dance-styles" class="btn btn-primary btn-sm">Manage Styles</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Levels</h5>
+                    <p class="card-text text-muted">Manage class difficulty levels.</p>
+                    <a href="/@companySlug/levels" class="btn btn-primary btn-sm">Manage Levels</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

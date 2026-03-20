@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>aspnet-WebApp-2aae5906-b85c-401f-a203-9e492ba579b1</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="10.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="10.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.3" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="10.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="10.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.1" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.1" />
+        <PackageReference Include="CsvHelper" Version="33.1.0" />
+        <PackageReference Include="X.PagedList" Version="10.5.9" />
+        <PackageReference Include="X.PagedList.EF" Version="10.5.9" />
+        <PackageReference Include="X.PagedList.Mvc.Core" Version="10.5.9" />
+        <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="10.0.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="10.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\App.BLL\App.BLL.csproj" />
+      <ProjectReference Include="..\App.DAL.EF\App.DAL.EF.csproj" />
+      <ProjectReference Include="..\App.DTO\App.DTO.csproj" />
+      <ProjectReference Include="..\App.Helpers\App.Helpers.csproj" />
+      <ProjectReference Include="..\App.Resources\App.Resources.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Views\Student\Create.cshtml" />
+      <AdditionalFiles Include="Views\Student\Detail.cshtml" />
+      <AdditionalFiles Include="Views\Student\Edit.cshtml" />
+      <AdditionalFiles Include="Views\Student\Index.cshtml" />
+    </ItemGroup>
+
+</Project>

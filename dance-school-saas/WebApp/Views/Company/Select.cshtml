@@ -1,0 +1,35 @@
+@model List<App.Domain.Company>
+
+@{
+    ViewData["Title"] = "Select Company";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <p>Please select a company to work with:</p>
+
+        <div class="list-group">
+            @foreach (var company in Model)
+            {
+                <form asp-action="Switch" method="post" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="companyId" value="@company.Id" />
+                    <div>
+                        <h5 class="mb-1">@company.Name</h5>
+                        <small class="text-muted">@company.Slug</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm">Select</button>
+                </form>
+            }
+        </div>
+    </div>
+</div>

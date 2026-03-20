@@ -1,0 +1,146 @@
+@model App.DTO.v1.ClassScheduling.CreateClassInputModel
+@{
+    ViewData["Title"] = "Create Class";
+    var slug = ViewData["Slug"] as string;
+    var studioRooms = ViewData["StudioRooms"] as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
+    var instructors = ViewData["Instructors"] as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
+    var danceStyles = ViewData["DanceStyles"] as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
+    var levels = ViewData["Levels"] as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
+}
+
+<h1>Create Class</h1>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create" asp-route-slug="@slug">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Details" class="form-label"></label>
+                <textarea asp-for="Details" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Details" class="text-danger"></span>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="StudioRoomId" class="form-label">Studio Room</label>
+                    <select asp-for="StudioRoomId" class="form-select">
+                        <option value="">Select Room</option>
+                        @foreach (var room in studioRooms)
+                        {
+                            <option value="@room.Id">@room.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="StudioRoomId" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label asp-for="InstructorId" class="form-label">Instructor</label>
+                    <select asp-for="InstructorId" class="form-select">
+                        <option value="">Select Instructor</option>
+                        @foreach (var instructor in instructors)
+                        {
+                            <option value="@instructor.Id">@instructor.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="InstructorId" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="DanceStyleId" class="form-label">Dance Style</label>
+                    <select asp-for="DanceStyleId" class="form-select">
+                        <option value="">Select Style</option>
+                        @foreach (var style in danceStyles)
+                        {
+                            <option value="@style.Id">@style.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="DanceStyleId" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label asp-for="LevelId" class="form-label">Level</label>
+                    <select asp-for="LevelId" class="form-select">
+                        <option value="">Select Level</option>
+                        @foreach (var level in levels)
+                        {
+                            <option value="@level.Id">@level.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="LevelId" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Capacity" class="form-label"></label>
+                <input asp-for="Capacity" class="form-control" type="number" min="1" />
+                <span asp-validation-for="Capacity" class="text-danger"></span>
+            </div>
+            
+            <h4>Recurrence</h4>
+            <hr />
+            
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label asp-for="DayOfWeek" class="form-label">Day of Week</label>
+                    <select asp-for="DayOfWeek" class="form-select">
+                        @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+                        {
+                            <option value="@day">@day</option>
+                        }
+                    </select>
+                    <span asp-validation-for="DayOfWeek" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <label asp-for="StartTime" class="form-label">Start Time</label>
+                    <input asp-for="StartTime" class="form-control" type="time" />
+                    <span asp-validation-for="StartTime" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <label asp-for="EndTime" class="form-label">End Time</label>
+                    <input asp-for="EndTime" class="form-control" type="time" />
+                    <span asp-validation-for="EndTime" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="RecurrenceStartDate" class="form-label">Start Date</label>
+                    <input asp-for="RecurrenceStartDate" class="form-control" type="date" />
+                    <span asp-validation-for="RecurrenceStartDate" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label asp-for="RecurrenceEndDate" class="form-label">End Date</label>
+                    <input asp-for="RecurrenceEndDate" class="form-control" type="date" />
+                    <span asp-validation-for="RecurrenceEndDate" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Create Class</button>
+                <a asp-action="Index" asp-route-slug="@slug" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

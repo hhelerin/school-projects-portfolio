@@ -1,0 +1,142 @@
+@model List<App.DTO.v1.ClassScheduling.ClassScheduleListItemDto>
+@{
+    ViewData["Title"] = "Schedule";
+    var slug = ViewData["Slug"] as string;
+    var weekStart = ViewData["WeekStart"] as DateOnly?;
+    var weekEnd = ViewData["WeekEnd"] as DateOnly?;
+    var danceStyleId = ViewData["DanceStyleId"] as Guid?;
+    var levelId = ViewData["LevelId"] as Guid?;
+    var studioRoomId = ViewData["StudioRoomId"] as Guid?;
+    var instructorId = ViewData["InstructorId"] as Guid?;
+    
+    var danceStyles = ViewData["DanceStyles"] as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
+    var levels = ViewData["Levels"] as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
+    var studioRooms = ViewData["StudioRooms"] as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
+    var instructors = ViewData["Instructors"] as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
+    
+    var prevWeek = weekStart?.AddDays(-7);
+    var nextWeek = weekStart?.AddDays(7);
+}
+
+<h1>Weekly Schedule</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<div class="mb-3">
+    <a asp-action="Index" asp-route-slug="@slug" asp-route-weekStart="@prevWeek" class="btn btn-outline-secondary">&larr; Previous Week</a>
+    <span class="mx-3">@weekStart?.ToString("d") - @weekEnd?.ToString("d")</span>
+    <a asp-action="Index" asp-route-slug="@slug" asp-route-weekStart="@nextWeek" class="btn btn-outline-secondary">Next Week &rarr;</a>
+</div>
+
+<form asp-action="Index" asp-route-slug="@slug" method="get" class="row g-3 mb-3 p-3 bg-light rounded">
+    <div class="col-auto">
+        <label class="form-label">Dance Style</label>
+        <select name="styleId" class="form-select">
+            <option value="">All Styles</option>
+            @foreach (var style in danceStyles)
+            {
+                <option value="@style.Id" selected="@(danceStyleId == style.Id)">@style.Name</option>
+            }
+        </select>
+    </div>
+    <div class="col-auto">
+        <label class="form-label">Level</label>
+        <select name="levelId" class="form-select">
+            <option value="">All Levels</option>
+            @foreach (var level in levels)
+            {
+                <option value="@level.Id" selected="@(levelId == level.Id)">@level.Name</option>
+            }
+        </select>
+    </div>
+    <div class="col-auto">
+        <label class="form-label">Room</label>
+        <select name="roomId" class="form-select">
+            <option value="">All Rooms</option>
+            @foreach (var room in studioRooms)
+            {
+                <option value="@room.Id" selected="@(studioRoomId == room.Id)">@room.Name</option>
+            }
+        </select>
+    </div>
+    <div class="col-auto">
+        <label class="form-label">Instructor</label>
+        <select name="instructorId" class="form-select">
+            <option value="">All Instructors</option>
+            @foreach (var instructor in instructors)
+            {
+                <option value="@instructor.Id" selected="@(instructorId == instructor.Id)">@instructor.Name</option>
+            }
+        </select>
+    </div>
+    <div class="col-auto align-self-end">
+        <button type="submit" class="btn btn-primary">Filter</button>
+        <a asp-action="Index" asp-route-slug="@slug" class="btn btn-secondary">Clear</a>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Class</th>
+            <th>Style</th>
+            <th>Level</th>
+            <th>Instructor</th>
+            <th>Room</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                <tr class="@(item.IsCancelled ? "text-decoration-line-through" : "")">
+                    <td>@item.Date.ToString("ddd d")</td>
+                    <td>@item.StartTime.ToString("t") - @item.EndTime.ToString("t")</td>
+                    <td>@item.ClassName</td>
+                    <td>@item.DanceStyleName</td>
+                    <td>@item.LevelName</td>
+                    <td>@item.InstructorName</td>
+                    <td>@item.StudioRoomName</td>
+                    <td>
+                        @if (item.IsCancelled)
+                        {
+                            <span class="badge bg-danger">Cancelled</span>
+                            if (!string.IsNullOrEmpty(item.CancellationReason))
+                            {
+                                <span class="d-block small">@item.CancellationReason</span>
+                            }
+                        }
+                        else if (item.IsException)
+                        {
+                            <span class="badge bg-warning">Edited</span>
+                        }
+                    </td>
+                    <td>
+                        @if (!item.IsCancelled)
+                        {
+                            <a asp-action="Edit" asp-route-slug="@slug" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="9" class="text-center">No classes scheduled for this week.</td>
+            </tr>
+        }
+    </tbody>
+</table>

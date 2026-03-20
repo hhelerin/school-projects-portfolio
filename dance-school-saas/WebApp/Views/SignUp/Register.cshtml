@@ -1,0 +1,124 @@
+@model App.DTO.v1.Identity.SignUpSchoolInputModel
+@{
+    ViewData["Title"] = "Register Your Dance School";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Register Your Dance School</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Register" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <h4 class="mb-3">Owner Information</h4>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="OwnerFirstName" class="form-label">First Name</label>
+                                <input asp-for="OwnerFirstName" class="form-control" />
+                                <span asp-validation-for="OwnerFirstName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="OwnerLastName" class="form-label">Last Name</label>
+                                <input asp-for="OwnerLastName" class="form-control" />
+                                <span asp-validation-for="OwnerLastName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <input asp-for="Email" class="form-control" type="email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Password" class="form-label">Password</label>
+                                <input asp-for="Password" class="form-control" type="password" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                                <small class="form-text text-muted">At least 8 characters with 1 uppercase and 1 digit</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
+                                <input asp-for="ConfirmPassword" class="form-control" type="password" />
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <hr class="my-4" />
+                        
+                        <h4 class="mb-3">School Information</h4>
+
+                        <div class="mb-3">
+                            <label asp-for="SchoolName" class="form-label">School Name</label>
+                            <input asp-for="SchoolName" class="form-control" id="schoolName" />
+                            <span asp-validation-for="SchoolName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Slug" class="form-label">School URL</label>
+                            <div class="input-group">
+                                <span class="input-group-text">localhost:5000/</span>
+                                <input asp-for="Slug" class="form-control" id="slug" placeholder="my-dance-school" />
+                            </div>
+                            <span asp-validation-for="Slug" class="text-danger"></span>
+                            <small class="form-text text-muted">Auto-generated from school name. You can customize it.</small>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="RegistrationCode" class="form-label">Registration Code (Optional)</label>
+                                <input asp-for="RegistrationCode" class="form-control" />
+                                <span asp-validation-for="RegistrationCode" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="VATCode" class="form-label">VAT Code (Optional)</label>
+                                <input asp-for="VATCode" class="form-control" />
+                                <span asp-validation-for="VATCode" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Create School</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const schoolNameInput = document.getElementById('schoolName');
+            const slugInput = document.getElementById('slug');
+            let slugEdited = false;
+
+            // Track if user has manually edited the slug
+            slugInput.addEventListener('input', function() {
+                slugEdited = true;
+            });
+
+            // Auto-generate slug from school name
+            schoolNameInput.addEventListener('input', function() {
+                if (!slugEdited) {
+                    const schoolName = schoolNameInput.value;
+                    const slug = schoolName
+                        .toLowerCase()
+                        .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+                        .replace(/\s+/g, '-')         // Replace spaces with hyphens
+                        .replace(/-+/g, '-')         // Replace multiple hyphens with single
+                        .trim('-');                   // Remove leading/trailing hyphens
+                    
+                    slugInput.value = slug;
+                }
+            });
+        });
+    </script>
+}

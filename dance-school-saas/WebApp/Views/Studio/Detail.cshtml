@@ -1,0 +1,87 @@
+@model App.DTO.v1.SchoolConfiguration.StudioDetailDto
+@{
+    ViewData["Title"] = "Studio Details";
+    var slug = ViewData["Slug"] as string;
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1>@Model.Name</h1>
+            <a asp-action="Index" asp-route-slug="@slug" class="btn btn-outline-secondary btn-sm">← Back to Studios</a>
+        </div>
+        <div>
+            <a asp-action="Edit" asp-route-slug="@slug" asp-route-id="@Model.Id" class="btn btn-outline-primary">Edit Studio</a>
+            <a asp-controller="StudioRoom" asp-action="Index" asp-route-slug="@slug" asp-route-studioId="@Model.Id" class="btn btn-primary">Manage Rooms</a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Studio Information</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-3">Name</dt>
+                        <dd class="col-sm-9">@Model.Name</dd>
+
+                        @if (!string.IsNullOrEmpty(Model.ContactInfo))
+                        {
+                            <dt class="col-sm-3">Contact</dt>
+                            <dd class="col-sm-9">@Model.ContactInfo</dd>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.Details))
+                        {
+                            <dt class="col-sm-3">Details</dt>
+                            <dd class="col-sm-9">@Model.Details</dd>
+                        }
+
+                        <dt class="col-sm-3">Rooms</dt>
+                        <dd class="col-sm-9">@Model.RoomCount</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <h3>Rooms</h3>
+        @if (Model.Rooms != null && Model.Rooms.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Details</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var room in Model.Rooms)
+                    {
+                        <tr>
+                            <td>@room.Name</td>
+                            <td>@(room.Details?.Length > 50 ? room.Details.Substring(0, 50) + "..." : room.Details)</td>
+                            <td class="text-end">
+                                <a asp-controller="StudioRoom" asp-action="Edit" asp-route-slug="@slug" asp-route-studioId="@Model.Id" asp-route-id="@room.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-muted">No rooms added yet.</p>
+        }
+        <a asp-controller="StudioRoom" asp-action="Create" asp-route-slug="@slug" asp-route-studioId="@Model.Id" class="btn btn-outline-primary">Add Room</a>
+    </div>
+</div>

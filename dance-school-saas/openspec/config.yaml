@@ -1,0 +1,115 @@
+schema: spec-driven
+context: |
+  Project
+  - Dance School Platform: multi-tenant SaaS for dance schools
+  - Practice project only — no production deployment
+  - Keep It Simple. Avoid abstractions that don't earn their complexity.
+
+  Tech Stack
+  - .NET 10, ASP.NET Core MVC (scaffolded controllers and Razor views)
+  - Entity Framework Core 10 with SQLite (Data Source=danceschool.db)
+  - ASP.NET Core Identity (authentication and authorization)
+  - MediatR for CQRS
+  - FluentValidation for input validation
+  - Bootstrap (via wwwroot libs)
+  - xUnit + Moq for testing
+
+  Solution Structure
+  - DanceSchool.Domain          — entities, interfaces, enums; zero external dependencies
+  - DanceSchool.Application     — CQRS handlers, validators, DTOs, service interfaces
+  - DanceSchool.Infrastructure  — EF Core, Identity, repositories, tenant resolution
+  - DanceSchool.Web             — ASP.NET Core MVC controllers, views, DI wiring
+  - No separate API project. All user interaction is through MVC controllers and Razor views.
+
+  Code Style
+  - Nullable reference types enabled
+  - Primary constructors for classes
+  - File-scoped namespaces
+  - `default!` for required string properties in entities
+
+  Architecture
+  - Clean Architecture: Web → Application → Domain
+  - Infrastructure implements interfaces defined in Application
+  - Domain has zero external dependencies
+  - Dependency injection wired in DanceSchool.Web / Program.cs
+
+  Domain Entities
+  - All business entities inherit from BaseEntity:
+      public Guid Id { get; set; }
+      public DateTime CreatedAt { get; set; }
+      public DateTime UpdatedAt { get; set; }
+      public bool IsDeleted { get; set; }
+  - Tenant-scoped entities additionally carry: public Guid CompanyId { get; set; }
+  - Soft deletes only; IsDeleted = true, never hard-delete business entities
+  - EF Core global query filters exclude IsDeleted = true automatically
+
+  Multi-Tenancy
+  - Path-based routing: localhost/school-name/...
+  - TenantResolutionMiddleware reads slug from URL, populates ITenantContext (CompanyId + Slug)
+  - All queries filter by CompanyId for data isolation
+  - Users can belong to multiple companies; role assignments are per-company
+
+  Authentication & Authorization
+  - ASP.NET Core Identity, role-based via [Authorize(Roles = "...")]
+  - System roles: SystemAdmin, SystemSupport, SystemBilling
+  - Company roles: CompanyOwner, CompanyAdmin, CompanyManager, CompanyEmployee
+  - CompanyUser join table: AppUser ↔ Company (IsActive, JoinedAt)
+  - CompanyUserRole join table: CompanyUser ↔ CompanyRole
+
+  Data Access
+  - IRepository<T> and IUnitOfWork defined in Application, implemented in Infrastructure
+  - AppDbContext inherits IdentityDbContext<AppUser>
+  - EF Core CLI for all migrations (dotnet ef migrations add / dotnet ef database update)
+  - All DateTime values stored and compared as UTC
+  - Cascade delete disabled globally; manage relationships explicitly
+
+  CQRS Pattern
+  - MediatR; one file per command or query handler
+  - Flat feature folder structure under Application/Features/{Entity}/
+  - Handlers return Result<T>; no exceptions thrown for business logic errors
+  - Result<T> shape: bool IsSuccess, T? Value, string? Error
+
+  Validation
+  - FluentValidation; every command has a corresponding validator
+  - Validators registered via DI assembly scan in Program.cs
+
+  Error Handling
+  - Business errors: Result<T> — handlers return errors, never throw
+  - Unexpected exceptions: global exception handler middleware returns a user-friendly error page
+  - Controllers check Result.IsSuccess and return appropriate views or ModelState errors
+
+  Business Rules (enforced in Application layer)
+  - Trial policy: one free class per Student per DanceStyle; tracked via TrialRecord; checked at check-in
+  - Package expiry: packages past ExpiryDate are blocked at check-in; staff prompted to sell a new one
+  - Low-class alert: show warning when RemainingClasses ≤ threshold (default 2, stored in CompanySettings)
+  - Showcase eligibility: recalculated after every check-in; thresholds in CompanySettings per style
+
+  Testing
+  - xUnit + Moq
+  - Unit tests target Application layer handlers and domain logic
+  - Test projects: DanceSchool.Domain.Tests, DanceSchool.Application.Tests, DanceSchool.Web.Tests
+
+  Out of Scope
+  - No REST API layer
+  - No separate frontend framework (React, Angular, etc.)
+  - No Docker, no cloud deployment, no background jobs, no payment processing
+
+
+# Project context (optional)
+# This is shown to AI when creating artifacts.
+# Add your tech stack, conventions, style guides, domain knowledge, etc.
+# Example:
+#   context: |
+#     Tech stack: TypeScript, React, Node.js
+#     We use conventional commits
+#     Domain: e-commerce platform
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours

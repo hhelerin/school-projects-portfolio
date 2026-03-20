@@ -1,0 +1,100 @@
+@model App.DTO.v1.ClassScheduling.ClassDetailDto
+@{
+    ViewData["Title"] = "Class Details";
+    var slug = ViewData["Slug"] as string;
+    var schedules = ViewData["Schedules"] as List<App.DTO.v1.ClassScheduling.ClassScheduleListItemDto>;
+}
+
+<h1>@Model.Name</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Dance Style</dt>
+        <dd class="col-sm-10">@Model.DanceStyleName</dd>
+        
+        <dt class="col-sm-2">Level</dt>
+        <dd class="col-sm-10">@Model.LevelName</dd>
+        
+        <dt class="col-sm-2">Instructor</dt>
+        <dd class="col-sm-10">@Model.InstructorName</dd>
+        
+        <dt class="col-sm-2">Room</dt>
+        <dd class="col-sm-10">@Model.StudioRoomName</dd>
+        
+        <dt class="col-sm-2">Capacity</dt>
+        <dd class="col-sm-10">@Model.Capacity</dd>
+        
+        <dt class="col-sm-2">Details</dt>
+        <dd class="col-sm-10">@Model.Details</dd>
+        
+        <dt class="col-sm-2">Recurrence</dt>
+        <dd class="col-sm-10">@Model.RecurrenceSummary</dd>
+        
+        <dt class="col-sm-2">Start Date</dt>
+        <dd class="col-sm-10">@Model.RecurrenceStartDate.ToString("d")</dd>
+        
+        <dt class="col-sm-2">End Date</dt>
+        <dd class="col-sm-10">@Model.RecurrenceEndDate.ToString("d")</dd>
+        
+        <dt class="col-sm-2">Upcoming Classes</dt>
+        <dd class="col-sm-10">@Model.UpcomingScheduleCount</dd>
+    </dl>
+</div>
+
+<p>
+    <a asp-action="Edit" asp-route-slug="@slug" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" asp-route-slug="@slug" class="btn btn-secondary">Back to List</a>
+</p>
+
+<h3>Upcoming Schedule</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Room</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (schedules != null && schedules.Any())
+        {
+            @foreach (var schedule in schedules)
+            {
+                <tr class="@(schedule.IsCancelled ? "text-muted" : "")">
+                    <td>@schedule.Date.ToString("d")</td>
+                    <td>@schedule.StartTime.ToString("t") - @schedule.EndTime.ToString("t")</td>
+                    <td>@schedule.StudioRoomName</td>
+                    <td>
+                        @if (schedule.IsCancelled)
+                        {
+                            <span class="badge bg-danger">Cancelled</span>
+                            if (!string.IsNullOrEmpty(schedule.CancellationReason))
+                            {
+                                <span class="d-block small">@schedule.CancellationReason</span>
+                            }
+                        }
+                        else if (schedule.IsException)
+                        {
+                            <span class="badge bg-warning">Edited</span>
+                        }
+                    </td>
+                    <td>
+                        @if (!schedule.IsCancelled)
+                        {
+                            <a asp-controller="ClassSchedule" asp-action="Edit" asp-route-slug="@slug" asp-route-id="@schedule.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">No upcoming classes scheduled.</td>
+            </tr>
+        }
+    </tbody>
+</table>

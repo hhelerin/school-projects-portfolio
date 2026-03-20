@@ -1,0 +1,78 @@
+﻿@model WebApp.ViewModels.HomeViewModel
+@{
+    ViewData["Title"] = "Dance School SaaS";
+}
+
+<div class="text-center">
+    @if (Model.IsAuthenticated)
+    {
+        <h1 class="display-4">Welcome back, @Model.UserFirstName!</h1>
+        <p class="lead">Manage your dance schools from one place</p>
+        
+        @if (Model.IsRootUser)
+        {
+            <div class="alert alert-info mt-4">
+                <i class="bi bi-shield-lock"></i> <strong>System Administrator</strong>
+                <div class="mt-2">
+                    <a asp-area="Root" asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">
+                        <i class="bi bi-gear"></i> Admin Panel
+                    </a>
+                </div>
+            </div>
+        }
+        
+        @if (Model.UserCompanies.Any())
+        {
+            <div class="row mt-4 justify-content-center">
+                @foreach (var company in Model.UserCompanies)
+                {
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">@company.Name</h5>
+                                <p class="card-text text-muted">Your dance school dashboard</p>
+                                <a href="/@company.Slug/dashboard" class="btn btn-primary">
+                                    <i class="bi bi-speedometer2"></i> Open Dashboard
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="mt-4">
+                <p class="text-muted">You're not associated with any dance schools yet.</p>
+                <a asp-controller="SignUp" asp-action="Register" class="btn btn-success btn-lg">
+                    <i class="bi bi-building-add"></i> Create Your School
+                </a>
+            </div>
+        }
+        
+        <div class="mt-4">
+            <a asp-controller="Account" asp-action="Profile" class="btn btn-outline-secondary">
+                <i class="bi bi-person"></i> My Profile
+            </a>
+            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" class="d-inline">
+                <button type="submit" class="btn btn-outline-danger ms-2">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </button>
+            </form>
+        </div>
+    }
+    else
+    {
+        <h1 class="display-4">Manage Your Dance School</h1>
+        <p class="lead">All-in-one platform for dance schools</p>
+        
+        <div class="mt-4">
+            <a href="/register" class="btn btn-primary btn-lg">
+                <i class="bi bi-building-add"></i> Sign Up My Dance School
+            </a>
+            <a href="/Account/Login" class="btn btn-outline-secondary btn-lg ms-2">
+                <i class="bi bi-box-arrow-in-right"></i> Sign In
+            </a>
+        </div>
+    }
+</div>

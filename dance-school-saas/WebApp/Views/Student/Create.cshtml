@@ -1,0 +1,79 @@
+@model App.DTO.v1.Students.RegisterStudentInputModel
+@{
+    ViewData["Title"] = "Register Student";
+    var slug = ViewData["Slug"] as string;
+    var companyUsers = ViewData["CompanyUsers"] as IEnumerable<App.DTO.v1.SchoolConfiguration.CompanyUserDropdownDto> ?? Enumerable.Empty<App.DTO.v1.SchoolConfiguration.CompanyUserDropdownDto>();
+    var showDuplicateWarning = ViewData["ShowDuplicateWarning"] as bool? ?? false;
+}
+
+<div class="container mt-4">
+    <h1>Register New Student</h1>
+    <hr />
+
+    @if (showDuplicateWarning)
+    {
+        <div class="alert alert-warning">
+            <strong>Duplicate Warning:</strong> A student with the same name and contact information already exists.
+            <form asp-action="Create" asp-route-slug="@slug" method="post" class="d-inline">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="Name" value="@Model.Name" />
+                <input type="hidden" name="PersonalId" value="@Model.PersonalId" />
+                <input type="hidden" name="ContactInfo" value="@Model.ContactInfo" />
+                <input type="hidden" name="Details" value="@Model.Details" />
+                <input type="hidden" name="AppUserId" value="@Model.AppUserId" />
+                <input type="hidden" name="ConfirmDuplicate" value="true" />
+                <button type="submit" class="btn btn-warning">Save Anyway</button>
+            </form>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    <form asp-action="Create" asp-route-slug="@slug" method="post">
+        @Html.AntiForgeryToken()
+        
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Name *</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="PersonalId" class="form-label">Personal ID</label>
+            <input asp-for="PersonalId" class="form-control" />
+            <span asp-validation-for="PersonalId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ContactInfo" class="form-label">Contact Info</label>
+            <input asp-for="ContactInfo" class="form-control" placeholder="Email or phone" />
+            <span asp-validation-for="ContactInfo" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Details" class="form-label">Details</label>
+            <textarea asp-for="Details" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Details" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="AppUserId" class="form-label">Link to Platform Account</label>
+            <select asp-for="AppUserId" class="form-select">
+                <option value="">-- No linked account --</option>
+                @foreach (var user in companyUsers)
+                {
+                    <option value="@user.Id">@user.FullName (@user.Email)</option>
+                }
+            </select>
+            <span asp-validation-for="AppUserId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Register</button>
+            <a asp-action="Index" asp-route-slug="@slug" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
